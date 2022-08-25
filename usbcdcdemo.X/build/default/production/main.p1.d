@@ -13,8 +13,5 @@ usb_hal.h  \
 usb_hal_pic18.h  \
 fixed_address_memory.h  \
 timer0.h  \
-pwm.h  \
-cpu_map_pic18f4550.h  \
-GPIO.h  \
 pins_config.h  \
 commands.h 

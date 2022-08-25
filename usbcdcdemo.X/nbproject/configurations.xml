@@ -20,7 +20,8 @@
       <itemPath>timer0.h</itemPath>
       <itemPath>pwm.h</itemPath>
       <itemPath>cpu_map_pic18f4550.h</itemPath>
-      <itemPath>GPIO.h</itemPath>
+      <itemPath>pins_config.h</itemPath>
+      <itemPath>commands.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -37,6 +38,7 @@
       <itemPath>usb_device_events.c</itemPath>
       <itemPath>timer0.c</itemPath>
       <itemPath>pwm.c</itemPath>
+      <itemPath>pins_config.c</itemPath>
       <itemPath>GPIO.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"

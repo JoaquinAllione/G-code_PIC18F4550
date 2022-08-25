@@ -26,7 +26,8 @@
 #define M84_COMMAND 12
 #define M117_COMMAND 13
 
-#define PWM_COMMAND 14
+#define CUSTOM_COMMAND_1 14
+#define CUSTOM_COMMAND_2 15
 
 #endif	/* COMMANDS_H */
 
