@@ -7533,31 +7533,10 @@ void __attribute__((picinterrupt(("")))) mainISR (void)
 
         motor_1.axis_commanded.limit_1 = PORTDbits.RD6;
         motor_1.axis_commanded.limit_2 = PORTBbits.RB1;
+
         if(motor_1.state == ENABLED) LATEbits.LATE0 = !LATEbits.LATE0;
     }
     processUSBTasks();
-}
-
-void Go_home(){
-
-
-    DirectionSet(&motor_1, CLOCKWISE);
-    motor_1.count = 0;
-    MotorStateSet(&motor_1, ENABLED);
-    while(motor_1.axis_commanded.limit_1){
-
-    }
-    DirectionSet(&motor_1, UNCLOCKWISE);
-    while(!motor_1.axis_commanded.limit_1){
-
-    }
-    MotorStateSet(&motor_1, DISABLED);
-
-    motor_1.position_current = 0.0;
-    motor_1.position_set = 0.0;
-
-    putUSBUSART(((const __attribute__((space(prog))) char *)("X HOME ARRIVE!")),sizeof("X HOME ARRIVE!"));
-
 }
 
 int CommandDetermine(char* line){
@@ -7566,6 +7545,7 @@ int CommandDetermine(char* line){
     char* endPtr;
     char letter;
     int interger;
+    float x_pos;
     _Bool invalid_command = 0;
     int command = -1;
     while((token != ((void*)0))&&(!invalid_command)) {
@@ -7606,7 +7586,7 @@ int CommandDetermine(char* line){
                     case 28:
 
                         command = 4;
-
+                        putUSBUSART(((const __attribute__((space(prog))) char *)("G28-command arrive!\n")),sizeof("G28-command arrive!\n"));
 
                         break;
                     case 90:
@@ -7676,7 +7656,8 @@ int CommandDetermine(char* line){
 
             case 'X':
 
-
+                x_pos = strtof(token, &endPtr);
+                motor_1.position_set = x_pos;
 
                 break;
 
@@ -7707,22 +7688,18 @@ int CommandDetermine(char* line){
 
     }
 
-    if(command == 4) Go_home();
+
     return command;
 
 
 }
 
-_Bool MEF_DataArrive(void);
-int command;
+void MEF_Principal(void);
 
 void protocol_main_loop(void)
 {
 
-    if(MEF_DataArrive()){
-        command = CommandDetermine(usbReadBuffer);
-    }
-
+    MEF_Principal();
     CDCTxService();
 
     return;
@@ -7731,6 +7708,7 @@ void protocol_main_loop(void)
 
 typedef enum{
     EST_MEF_DATA_INIT = 0,
+    EST_MEF_DATA_WAIT,
     EST_MEF_DATA_CHECK_END,
 }estMefDataArrive_enum;
 
@@ -7746,10 +7724,16 @@ _Bool MEF_DataArrive(void){
         case EST_MEF_DATA_INIT:
 
             dataIn = 0;
+            numBytesRead = 0;
+            estMefDataArrive = EST_MEF_DATA_WAIT;
+
+            break;
+
+        case EST_MEF_DATA_WAIT:
+
             numBytesRead = getsUSBUSART(usbReadBuffer, sizeof(usbReadBuffer));
-            if(numBytesRead > 0) {
-                estMefDataArrive = EST_MEF_DATA_CHECK_END;
-            }
+            if(numBytesRead > 0) { estMefDataArrive = EST_MEF_DATA_CHECK_END; }
+
             break;
 
         case EST_MEF_DATA_CHECK_END:
@@ -7764,6 +7748,128 @@ _Bool MEF_DataArrive(void){
 
         default:
             estMefDataArrive = EST_MEF_DATA_INIT;
+            dataIn = 0;
+            break;
+
+    }
+    return dataIn;
+}
+
+typedef enum{
+    EST_MEF_GO_HOME_INIT = 0,
+    EST_MEF_GO_HOME_MOVING,
+    EST_MEF_GO_HOME_REVERSE,
+}estMefGoHome_enum;
+
+_Bool ready = 0;
+
+_Bool MEF_GoHome(void){
+
+    static estMefGoHome_enum estMefGoHome = EST_MEF_GO_HOME_INIT;
+
+    switch(estMefGoHome){
+
+        case EST_MEF_GO_HOME_INIT:
+
+            ready = 0;
+
+            MotorStateSet(&motor_1, DISABLED);
+            _delay((unsigned long)((1)*(48000000/4000000.0)));
+            DirectionSet(&motor_1, CLOCKWISE);
+            _delay((unsigned long)((1)*(48000000/4000000.0)));
+            MotorStateSet(&motor_1, ENABLED);
+
+            estMefGoHome = EST_MEF_GO_HOME_MOVING;
+
+            break;
+
+        case EST_MEF_GO_HOME_MOVING:
+
+            if(!motor_1.axis_commanded.limit_1){
+
+                MotorStateSet(&motor_1, DISABLED);
+                _delay((unsigned long)((1)*(48000000/4000000.0)));
+                DirectionSet(&motor_1, UNCLOCKWISE);
+                _delay((unsigned long)((1)*(48000000/4000000.0)));
+                MotorStateSet(&motor_1, ENABLED);
+
+                estMefGoHome = EST_MEF_GO_HOME_REVERSE;
+
+            }
+
+            break;
+
+        case EST_MEF_GO_HOME_REVERSE:
+
+            if(motor_1.axis_commanded.limit_1){
+
+                MotorStateSet(&motor_1, DISABLED);
+                _delay((unsigned long)((1)*(48000000/4000000.0)));
+                DirectionSet(&motor_1, CLOCKWISE);
+
+                motor_1.position_current = 0.0;
+                motor_1.position_set = 0.0;
+
+                motor_1.count = 0;
+                ready = 1;
+
+                estMefGoHome = EST_MEF_GO_HOME_INIT;
+
+            }
+
+            break;
+
+        default:
+            estMefGoHome = EST_MEF_GO_HOME_INIT;
+            ready = 0;
+            break;
+
+    }
+    return ready;
+}
+
+typedef enum{
+    EST_MEF_PRINCIPAL_WAIT_FRAME = 0,
+    EST_MEF_PRINCIPAL_READ_FRAME,
+    EST_MEF_PRINCIPAL_G28_EXECUTE,
+}estMefPrincipal_enum;
+
+void MEF_Principal(void){
+
+    static estMefPrincipal_enum estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
+
+    switch(estMefPrincipal){
+
+        case EST_MEF_PRINCIPAL_WAIT_FRAME:
+
+            if(MEF_DataArrive()){
+                LATCbits.LATC2 = !LATCbits.LATC2;
+                estMefPrincipal = EST_MEF_PRINCIPAL_READ_FRAME;
+            }
+
+            break;
+
+        case EST_MEF_PRINCIPAL_READ_FRAME:
+
+            if(4 == CommandDetermine(usbReadBuffer)){
+                estMefPrincipal = EST_MEF_PRINCIPAL_G28_EXECUTE;
+            }else{
+                estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
+            }
+
+            break;
+
+        case EST_MEF_PRINCIPAL_G28_EXECUTE:
+
+            if(MEF_GoHome()){
+                estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
+                putUSBUSART(((const __attribute__((space(prog))) char *)("HOME ARRIVE!\n")),sizeof("HOME ARRIVE!\n"));
+            }
+
+            break;
+
+        default:
+            estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
             break;
 
     }

@@ -201,31 +201,10 @@ void __interrupt() mainISR (void)
         
         motor_1.axis_commanded.limit_1 = LIMIT_X1_STATE;
         motor_1.axis_commanded.limit_2 = LIMIT_X2_STATE;
+        
         if(motor_1.state == ENABLED) STEP_X_AXIS_STATE = !STEP_X_AXIS_STATE;
     }
     processUSBTasks();
-}
-
-void Go_home(){
-    
-    // -----------------MOTOR 1 - AXIS X HOME RUTINE-------------------
-    DirectionSet(&motor_1, CLOCKWISE);
-    motor_1.count = 0;
-    MotorStateSet(&motor_1, ENABLED);
-    while(motor_1.axis_commanded.limit_1){
-        
-    }
-    DirectionSet(&motor_1, UNCLOCKWISE);
-    while(!motor_1.axis_commanded.limit_1){
-        
-    }
-    MotorStateSet(&motor_1, DISABLED);
-    
-    motor_1.position_current = 0.0;
-    motor_1.position_set = 0.0;
-    
-    putUSBUSART(PSTR("X HOME ARRIVE!"),sizeof("X HOME ARRIVE!"));
-    
 }
 
 int CommandDetermine(char* line){
@@ -234,6 +213,7 @@ int CommandDetermine(char* line){
     char* endPtr;
     char letter;
     int interger;
+    float x_pos; //posiciones seteadas en el comando
     bool invalid_command = false;
     int command = NONE_COMMAND;
     while((token != NULL)&&(!invalid_command)) {
@@ -274,7 +254,7 @@ int CommandDetermine(char* line){
                     case 28: // ----------------------------------- G28 commands
                         
                         command = G28_COMMAND;
-                        //putUSBUSART(PSTR("G28-command arrive!\n"),sizeof("G28-command arrive!\n"));
+                        putUSBUSART(PSTR("G28-command arrive!\n"),sizeof("G28-command arrive!\n"));
                         
                         break;
                     case 90: // ----------------------------------- G90 commands
@@ -344,7 +324,8 @@ int CommandDetermine(char* line){
             
             case 'X':
                 
-                
+                x_pos = strtof(token, &endPtr);
+                motor_1.position_set = x_pos;
       
                 break;
             
@@ -375,22 +356,18 @@ int CommandDetermine(char* line){
 
     }
     
-    if(command == G28_COMMAND) Go_home();
+    
     return command;
     //End of command frame analysis!!
 
 }
 
-bool MEF_DataArrive(void);
-int command;
+void MEF_Principal(void);
 
 void protocol_main_loop(void)
 {
     
-    if(MEF_DataArrive()){
-        command = CommandDetermine(usbReadBuffer);
-    }
-    
+    MEF_Principal();
     CDCTxService();
     
     return;
@@ -399,6 +376,7 @@ void protocol_main_loop(void)
 
 typedef enum{
     EST_MEF_DATA_INIT = 0,
+    EST_MEF_DATA_WAIT,
     EST_MEF_DATA_CHECK_END,
 }estMefDataArrive_enum;
 
@@ -414,10 +392,16 @@ bool MEF_DataArrive(void){
         case EST_MEF_DATA_INIT:
             
             dataIn = false;
+            numBytesRead = 0;
+            estMefDataArrive = EST_MEF_DATA_WAIT;
+            
+            break;
+        
+        case EST_MEF_DATA_WAIT:
+            
             numBytesRead = getsUSBUSART(usbReadBuffer, sizeof(usbReadBuffer));
-            if(numBytesRead > 0) {
-                estMefDataArrive = EST_MEF_DATA_CHECK_END;
-            }
+            if(numBytesRead > 0) { estMefDataArrive = EST_MEF_DATA_CHECK_END; }
+            
             break;
             
         case EST_MEF_DATA_CHECK_END:
@@ -432,6 +416,128 @@ bool MEF_DataArrive(void){
         
         default:
             estMefDataArrive = EST_MEF_DATA_INIT;
+            dataIn = false;
+            break;
+        
+    }
+    return dataIn;
+}
+
+typedef enum{
+    EST_MEF_GO_HOME_INIT = 0,
+    EST_MEF_GO_HOME_MOVING,
+    EST_MEF_GO_HOME_REVERSE,
+}estMefGoHome_enum;
+
+bool ready = false;
+
+bool MEF_GoHome(void){
+    
+    static estMefGoHome_enum estMefGoHome = EST_MEF_GO_HOME_INIT;
+    
+    switch(estMefGoHome){
+        
+        case EST_MEF_GO_HOME_INIT:
+            
+            ready = false;
+      
+            MotorStateSet(&motor_1, DISABLED);
+            __delay_us(1);
+            DirectionSet(&motor_1, CLOCKWISE);
+            __delay_us(1);
+            MotorStateSet(&motor_1, ENABLED);
+            
+            estMefGoHome = EST_MEF_GO_HOME_MOVING;
+            
+            break;
+            
+        case EST_MEF_GO_HOME_MOVING:
+            
+            if(!motor_1.axis_commanded.limit_1){
+                
+                MotorStateSet(&motor_1, DISABLED);
+                __delay_us(1);
+                DirectionSet(&motor_1, UNCLOCKWISE);
+                __delay_us(1);
+                MotorStateSet(&motor_1, ENABLED);
+            
+                estMefGoHome = EST_MEF_GO_HOME_REVERSE;
+                
+            }
+            
+            break;
+        
+        case EST_MEF_GO_HOME_REVERSE:
+            
+            if(motor_1.axis_commanded.limit_1){
+                
+                MotorStateSet(&motor_1, DISABLED);
+                __delay_us(1);
+                DirectionSet(&motor_1, CLOCKWISE);
+                
+                motor_1.position_current = 0.0;
+                motor_1.position_set = 0.0;
+                
+                motor_1.count = 0;
+                ready = true;
+            
+                estMefGoHome = EST_MEF_GO_HOME_INIT;
+                
+            }
+            
+            break;
+            
+        default:
+            estMefGoHome = EST_MEF_GO_HOME_INIT;
+            ready = false;
+            break;
+        
+    }
+    return ready;
+}
+
+typedef enum{
+    EST_MEF_PRINCIPAL_WAIT_FRAME = 0,
+    EST_MEF_PRINCIPAL_READ_FRAME,
+    EST_MEF_PRINCIPAL_G28_EXECUTE,
+}estMefPrincipal_enum;
+
+void MEF_Principal(void){
+    
+    static estMefPrincipal_enum estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
+    
+    switch(estMefPrincipal){
+        
+        case EST_MEF_PRINCIPAL_WAIT_FRAME:
+            
+            if(MEF_DataArrive()){
+                RELAY_STATE = !RELAY_STATE;
+                estMefPrincipal = EST_MEF_PRINCIPAL_READ_FRAME;
+            }
+            
+            break;
+            
+        case EST_MEF_PRINCIPAL_READ_FRAME:
+            
+            if(G28_COMMAND == CommandDetermine(usbReadBuffer)){
+                estMefPrincipal = EST_MEF_PRINCIPAL_G28_EXECUTE;
+            }else{
+                estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
+            }
+            
+            break;
+        
+        case EST_MEF_PRINCIPAL_G28_EXECUTE:
+            
+            if(MEF_GoHome()){
+                estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
+                putUSBUSART(PSTR("HOME ARRIVE!\n"),sizeof("HOME ARRIVE!\n"));
+            }
+            
+            break;
+        
+        default:
+            estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
             break;
         
     }
