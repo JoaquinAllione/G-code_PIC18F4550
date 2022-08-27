@@ -9,6 +9,10 @@
 #include "sysconfig.h"
 #include "timer0.h"
 
+void TIMER0_Set_TMR0L_Reg(unsigned char value){
+    TMR0L = value;
+}
+
 void Timer0_Init(void){
     
     RCONbits.IPEN = 0; //Disable priority levels on interrupts

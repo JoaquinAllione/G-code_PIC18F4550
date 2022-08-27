@@ -22,6 +22,7 @@
      */
 
 void Timer0_Init(void);
+void TIMER0_Set_TMR0L_Reg(unsigned char value);
 
 #endif	/* TIMER0_H */
 

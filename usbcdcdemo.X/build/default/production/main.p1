@@ -1,19 +1,19 @@
 Version 4.0 HI-TECH Software Intermediate Code
 "63 main.c
 [; ;main.c: 63: motor motor_1 = (motor){
-[c E4717 0 1 .. ]
-[n E4717 . ENABLED DISABLED  ]
-[c E4713 0 1 .. ]
-[n E4713 . CLOCKWISE UNCLOCKWISE  ]
-[c E4708 0 1 2 .. ]
-[n E4708 . AXIS_X AXIS_Y AXIS_Z  ]
+[c E4719 0 1 .. ]
+[n E4719 . ENABLED DISABLED  ]
+[c E4715 0 1 .. ]
+[n E4715 . CLOCKWISE UNCLOCKWISE  ]
+[c E4710 0 1 2 .. ]
+[n E4710 . AXIS_X AXIS_Y AXIS_Z  ]
 "45
 [; ;main.c: 45: typedef struct{
-[s S436 `E4708 1 `a 1 `a 1 ]
+[s S436 `E4710 1 `a 1 `a 1 ]
 [n S436 . designator limit_1 limit_2 ]
 "51
 [; ;main.c: 51: typedef struct {
-[s S437 `i 1 `E4717 1 `E4713 1 `f 1 `f 1 `S436 1 `f 1 ]
+[s S437 `i 1 `E4719 1 `E4715 1 `f 1 `f 1 `S436 1 `f 1 ]
 [n S437 . count state dir position_current position_set axis_commanded steps_per_mm ]
 "3191 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f4550.h
 [; ;C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f4550.h: 3191:     struct {
@@ -62,11 +62,18 @@ Version 4.0 HI-TECH Software Intermediate Code
 [v _LATDbits `VS135 ~T0 @X0 0 e@3980 ]
 "103 main.c
 [; ;main.c: 103: void MicroStepSet(motor *M, MicroStep_enum MS){
-[c E4701 0 1 2 3 4 .. ]
-[n E4701 . FULL_STEP HALF_STEP QUATER_STEP EIGHTH_STEP SIXTEENTH_STEP  ]
+[c E4703 0 1 2 3 4 .. ]
+[n E4703 . FULL_STEP HALF_STEP QUATER_STEP EIGHTH_STEP SIXTEENTH_STEP  ]
 "695 ./usb_device_cdc.h
 [; ;./usb_device_cdc.h: 695: void putUSBUSART(uint8_t *data, uint8_t Length);
 [v _putUSBUSART `(v ~T0 @X0 0 ef2`*uc`uc ]
+"25 ./timer0.h
+[; ;./timer0.h: 25: void TIMER0_Set_TMR0L_Reg(unsigned char value);
+[v _TIMER0_Set_TMR0L_Reg `(v ~T0 @X0 0 ef1`uc ]
+[v F3152 `(v ~T0 @X0 1 tf1`ul ]
+"203 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\pic18.h
+[v __delay `JF3152 ~T0 @X0 0 e ]
+[p i __delay ]
 [p mainexit ]
 "60 ./pins_config.h
 [; ;./pins_config.h: 60: void GPIO_Init(void);
@@ -74,7 +81,10 @@ Version 4.0 HI-TECH Software Intermediate Code
 "18 ./usb_cdc_lib.h
 [; ;./usb_cdc_lib.h: 18: void initUSBLib(void);
 [v _initUSBLib `(v ~T0 @X0 0 ef ]
-"19
+"24 ./timer0.h
+[; ;./timer0.h: 24: void Timer0_Init(void);
+[v _Timer0_Init `(v ~T0 @X0 0 ef ]
+"19 ./usb_cdc_lib.h
 [; ;./usb_cdc_lib.h: 19: unsigned char isUSBReady(void);
 [v _isUSBReady `(uc ~T0 @X0 0 ef ]
 "18 main.c
@@ -139,6 +149,21 @@ Version 4.0 HI-TECH Software Intermediate Code
 "2483
 [; ;C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f4550.h: 2483: extern volatile PORTBbits_t PORTBbits __attribute__((address(0xF81)));
 [v _PORTBbits `VS106 ~T0 @X0 0 e@3969 ]
+"3381
+[; ;C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f4550.h: 3381:     struct {
+[s S139 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S139 . LATE0 LATE1 LATE2 ]
+"3386
+[; ;C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f4550.h: 3386:     struct {
+[s S140 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S140 . LE0 LE1 LE2 ]
+"3380
+[; ;C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f4550.h: 3380: typedef union {
+[u S138 `S139 1 `S140 1 ]
+[n S138 . . . ]
+"3392
+[; ;C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f4550.h: 3392: extern volatile LATEbits_t LATEbits __attribute__((address(0xF8D)));
+[v _LATEbits `VS138 ~T0 @X0 0 e@3981 ]
 [v F3953 `(v ~T0 @X0 1 tf ]
 "21 ./usb_cdc_lib.h
 [; ;./usb_cdc_lib.h: 21: __attribute__((inline)) void processUSBTasks(void);
@@ -152,16 +177,16 @@ Version 4.0 HI-TECH Software Intermediate Code
 "28 C:\Program Files\Microchip\xc8\v2.32\pic\include\c99\stdlib.h
 [; ;C:\Program Files\Microchip\xc8\v2.32\pic\include\c99\stdlib.h: 28: float strtof (const char *restrict, char **restrict);
 [v _strtof `(f ~T0 @X0 0 ef2`*Cuc`**uc ]
-"412 main.c
-[; ;main.c: 412: _Bool MEF_DataArrive(void);
+"384 main.c
+[; ;main.c: 384: _Bool MEF_DataArrive(void);
 [v _MEF_DataArrive `(a ~T0 @X0 0 ef ]
 "831 ./usb_device_cdc.h
 [; ;./usb_device_cdc.h: 831: void CDCTxService(void);
 [v _CDCTxService `(v ~T0 @X0 0 ef ]
-"458 main.c
-[; ;main.c: 458:     static estMefDataArrive_enum estMefDataArrive = EST_MEF_DATA_INIT;
-[c E4767 0 1 .. ]
-[n E4767 . EST_MEF_DATA_INIT EST_MEF_DATA_WAIT  ]
+"410 main.c
+[; ;main.c: 410:     static estMefDataArrive_enum estMefDataArrive = EST_MEF_DATA_INIT;
+[c E4770 0 1 .. ]
+[n E4770 . EST_MEF_DATA_INIT EST_MEF_DATA_CHECK_END  ]
 "653 ./usb_device_cdc.h
 [; ;./usb_device_cdc.h: 653: uint8_t getsUSBUSART(uint8_t *buffer, uint8_t len);
 [v _getsUSBUSART `(uc ~T0 @X0 0 ef2`*uc`uc ]
@@ -770,13 +795,13 @@ Version 4.0 HI-TECH Software Intermediate Code
 :U ..
 :U ..
 -> 0 `i
-. `E4717 1
-. `E4713 0
+. `E4719 1
+. `E4715 0
 -> .0.0 `f
 -> .0.0 `f
 :U ..
 :U ..
-. `E4708 0
+. `E4710 0
 ..
 ..
 -> -> 100 `i `f
@@ -785,11 +810,11 @@ Version 4.0 HI-TECH Software Intermediate Code
 ]
 "73
 [; ;main.c: 73: void DirectionSet(motor *M, direction_enum dir){
-[v _DirectionSet `(v ~T0 @X0 1 ef2`*S437`E4713 ]
+[v _DirectionSet `(v ~T0 @X0 1 ef2`*S437`E4715 ]
 {
 [e :U _DirectionSet ]
 [v _M `*S437 ~T0 @X0 1 r1 ]
-[v _dir `E4713 ~T0 @X0 1 r2 ]
+[v _dir `E4715 ~T0 @X0 1 r2 ]
 [f ]
 "74
 [; ;main.c: 74:     switch((*M).axis_commanded.designator){
@@ -827,9 +852,9 @@ Version 4.0 HI-TECH Software Intermediate Code
 }
 [e $U 439  ]
 [e :U 440 ]
-[e [\ -> . . *U _M 5 0 `ui , $ -> . `E4708 0 `ui 441
- , $ -> . `E4708 1 `ui 442
- , $ -> . `E4708 2 `ui 443
+[e [\ -> . . *U _M 5 0 `ui , $ -> . `E4710 0 `ui 441
+ , $ -> . `E4710 1 `ui 442
+ , $ -> . `E4710 2 `ui 443
  439 ]
 [e :U 439 ]
 "85
@@ -841,11 +866,11 @@ Version 4.0 HI-TECH Software Intermediate Code
 }
 "88
 [; ;main.c: 88: void MotorStateSet(motor *M, state_enum state){
-[v _MotorStateSet `(v ~T0 @X0 1 ef2`*S437`E4717 ]
+[v _MotorStateSet `(v ~T0 @X0 1 ef2`*S437`E4719 ]
 {
 [e :U _MotorStateSet ]
 [v _M `*S437 ~T0 @X0 1 r1 ]
-[v _state `E4717 ~T0 @X0 1 r2 ]
+[v _state `E4719 ~T0 @X0 1 r2 ]
 [f ]
 "89
 [; ;main.c: 89:     switch((*M).axis_commanded.designator){
@@ -883,9 +908,9 @@ Version 4.0 HI-TECH Software Intermediate Code
 }
 [e $U 445  ]
 [e :U 446 ]
-[e [\ -> . . *U _M 5 0 `ui , $ -> . `E4708 0 `ui 447
- , $ -> . `E4708 1 `ui 448
- , $ -> . `E4708 2 `ui 449
+[e [\ -> . . *U _M 5 0 `ui , $ -> . `E4710 0 `ui 447
+ , $ -> . `E4710 1 `ui 448
+ , $ -> . `E4710 2 `ui 449
  445 ]
 [e :U 445 ]
 "100
@@ -897,11 +922,11 @@ Version 4.0 HI-TECH Software Intermediate Code
 }
 "103
 [; ;main.c: 103: void MicroStepSet(motor *M, MicroStep_enum MS){
-[v _MicroStepSet `(v ~T0 @X0 1 ef2`*S437`E4701 ]
+[v _MicroStepSet `(v ~T0 @X0 1 ef2`*S437`E4703 ]
 {
 [e :U _MicroStepSet ]
 [v _M `*S437 ~T0 @X0 1 r1 ]
-[v _MS `E4701 ~T0 @X0 1 r2 ]
+[v _MS `E4703 ~T0 @X0 1 r2 ]
 [f ]
 "105
 [; ;main.c: 105:     LATDbits.LATD3 = 0; LATDbits.LATD4 = 0; LATDbits.LATD5 = 0;
@@ -977,11 +1002,11 @@ Version 4.0 HI-TECH Software Intermediate Code
 }
 [e $U 451  ]
 [e :U 452 ]
-[e [\ -> _MS `ui , $ -> . `E4701 0 `ui 453
- , $ -> . `E4701 1 `ui 454
- , $ -> . `E4701 2 `ui 455
- , $ -> . `E4701 3 `ui 456
- , $ -> . `E4701 4 `ui 457
+[e [\ -> _MS `ui , $ -> . `E4703 0 `ui 453
+ , $ -> . `E4703 1 `ui 454
+ , $ -> . `E4703 2 `ui 455
+ , $ -> . `E4703 3 `ui 456
+ , $ -> . `E4703 4 `ui 457
  451 ]
 [e :U 451 ]
 "129
@@ -996,13 +1021,13 @@ Version 4.0 HI-TECH Software Intermediate Code
 [f ]
 "135
 [; ;main.c: 135:     DirectionSet(&motor_1, UNCLOCKWISE);
-[e ( _DirectionSet (2 , &U _motor_1 . `E4713 1 ]
+[e ( _DirectionSet (2 , &U _motor_1 . `E4715 1 ]
 "136
 [; ;main.c: 136:     MicroStepSet(&motor_1, FULL_STEP);
-[e ( _MicroStepSet (2 , &U _motor_1 . `E4701 0 ]
+[e ( _MicroStepSet (2 , &U _motor_1 . `E4703 0 ]
 "137
 [; ;main.c: 137:     MotorStateSet(&motor_1, DISABLED);
-[e ( _MotorStateSet (2 , &U _motor_1 . `E4717 1 ]
+[e ( _MotorStateSet (2 , &U _motor_1 . `E4719 1 ]
 "139
 [; ;main.c: 139: }
 [e :UE 458 ]
@@ -1016,7 +1041,7 @@ Version 4.0 HI-TECH Software Intermediate Code
 [f ]
 "143
 [; ;main.c: 143:     if ((*M).dir == CLOCKWISE){
-[e $ ! == -> . *U _M 2 `ui -> . `E4713 0 `ui 460  ]
+[e $ ! == -> . *U _M 2 `ui -> . `E4715 0 `ui 460  ]
 {
 "144
 [; ;main.c: 144:         putUSBUSART(((const __attribute__((space(prog))) char *)("Direction: CLOCKWISE\n")),sizeof("Direction: CLOCKWISE\n"));
@@ -1034,774 +1059,703 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;main.c: 147:     }
 }
 [e :U 461 ]
-"151
-[; ;main.c: 151: }
+"149
+[; ;main.c: 149: }
 [e :UE 459 ]
 }
-[v $root$_main `(v ~T0 @X0 0 e ]
-"153
-[; ;main.c: 153: void main(void)
-[v _main `(v ~T0 @X0 1 ef ]
 "154
-[; ;main.c: 154: {
+[; ;main.c: 154: unsigned char FR_current = 208;
+[v _FR_current `uc ~T0 @X0 1 e ]
+[i _FR_current
+-> -> 208 `i `uc
+]
+"155
+[; ;main.c: 155: unsigned char FR_set = 208;
+[v _FR_set `uc ~T0 @X0 1 e ]
+[i _FR_set
+-> -> 208 `i `uc
+]
+"157
+[; ;main.c: 157: void FeedRate_SetValue(unsigned char FR_value_set){
+[v _FeedRate_SetValue `(v ~T0 @X0 1 ef1`uc ]
+{
+[e :U _FeedRate_SetValue ]
+[v _FR_value_set `uc ~T0 @X0 1 r1 ]
+[f ]
+"158
+[; ;main.c: 158:     if (FR_value_set > FR_current){
+[e $ ! > -> _FR_value_set `i -> _FR_current `i 463  ]
+{
+"160
+[; ;main.c: 160:         for (unsigned char i = FR_current; i <= FR_value_set; i++){
+{
+[v _i `uc ~T0 @X0 1 a ]
+[e = _i _FR_current ]
+[e $U 467  ]
+[e :U 464 ]
+{
+"161
+[; ;main.c: 161:             TIMER0_Set_TMR0L_Reg(i);
+[e ( _TIMER0_Set_TMR0L_Reg (1 _i ]
+"162
+[; ;main.c: 162:             _delay((unsigned long)((100)*(48000000/4000.0)));
+[e ( __delay (1 -> * -> -> 100 `i `d / -> -> 48000000 `l `d .4000.0 `ul ]
+"163
+[; ;main.c: 163:         }
+}
+[e ++ _i -> -> 1 `i `uc ]
+[e :U 467 ]
+[e $ <= -> _i `i -> _FR_value_set `i 464  ]
+[e :U 465 ]
+}
+"164
+[; ;main.c: 164:     }else{
+}
+[e $U 468  ]
+[e :U 463 ]
+{
+"166
+[; ;main.c: 166:         for (unsigned char i = FR_value_set; i >= FR_current; i--){
+{
+[v _i `uc ~T0 @X0 1 a ]
+[e = _i _FR_value_set ]
+[e $U 472  ]
+[e :U 469 ]
+{
+"167
+[; ;main.c: 167:             TIMER0_Set_TMR0L_Reg(i);
+[e ( _TIMER0_Set_TMR0L_Reg (1 _i ]
+"168
+[; ;main.c: 168:             _delay((unsigned long)((100)*(48000000/4000.0)));
+[e ( __delay (1 -> * -> -> 100 `i `d / -> -> 48000000 `l `d .4000.0 `ul ]
+"169
+[; ;main.c: 169:         }
+}
+[e -- _i -> -> 1 `i `uc ]
+[e :U 472 ]
+[e $ >= -> _i `i -> _FR_current `i 469  ]
+[e :U 470 ]
+}
+"170
+[; ;main.c: 170:     }
+}
+[e :U 468 ]
+"171
+[; ;main.c: 171:     FR_current = FR_value_set;
+[e = _FR_current _FR_value_set ]
+"172
+[; ;main.c: 172: }
+[e :UE 462 ]
+}
+[v $root$_main `(v ~T0 @X0 0 e ]
+"174
+[; ;main.c: 174: void main(void)
+[v _main `(v ~T0 @X0 1 ef ]
+"175
+[; ;main.c: 175: {
 {
 [e :U _main ]
 [f ]
-"155
-[; ;main.c: 155:     GPIO_Init();
+"176
+[; ;main.c: 176:     GPIO_Init();
 [e ( _GPIO_Init ..  ]
-"156
-[; ;main.c: 156:     Motors_Init();
+"177
+[; ;main.c: 177:     Motors_Init();
 [e ( _Motors_Init ..  ]
-"158
-[; ;main.c: 158:     initUSBLib();
+"179
+[; ;main.c: 179:     initUSBLib();
 [e ( _initUSBLib ..  ]
-"160
-[; ;main.c: 160:     while(1)
-[e :U 464 ]
-"161
-[; ;main.c: 161:     {
+"180
+[; ;main.c: 180:     Timer0_Init();
+[e ( _Timer0_Init ..  ]
+"181
+[; ;main.c: 181:     TIMER0_Set_TMR0L_Reg(208);
+[e ( _TIMER0_Set_TMR0L_Reg (1 -> -> 208 `i `uc ]
+"183
+[; ;main.c: 183:     while(1)
+[e :U 475 ]
+"184
+[; ;main.c: 184:     {
 {
-"162
-[; ;main.c: 162:         if(isUSBReady())
-[e $ ! != -> ( _isUSBReady ..  `i -> 0 `i 466  ]
-"163
-[; ;main.c: 163:         {
+"185
+[; ;main.c: 185:         if(isUSBReady())
+[e $ ! != -> ( _isUSBReady ..  `i -> 0 `i 477  ]
+"186
+[; ;main.c: 186:         {
 {
-"164
-[; ;main.c: 164:             protocol_main_loop();
+"187
+[; ;main.c: 187:             protocol_main_loop();
 [e ( _protocol_main_loop ..  ]
-"165
-[; ;main.c: 165:         }
+"188
+[; ;main.c: 188:         }
 }
-[e :U 466 ]
-"166
-[; ;main.c: 166:     }
+[e :U 477 ]
+"189
+[; ;main.c: 189:     }
 }
-[e :U 463 ]
-[e $U 464  ]
-[e :U 465 ]
-"168
-[; ;main.c: 168:     return;
-[e $UE 462  ]
-"169
-[; ;main.c: 169: }
-[e :UE 462 ]
+[e :U 474 ]
+[e $U 475  ]
+[e :U 476 ]
+"191
+[; ;main.c: 191:     return;
+[e $UE 473  ]
+"192
+[; ;main.c: 192: }
+[e :UE 473 ]
 }
 [v $root$_mainISR `(v ~T0 @X0 0 e ]
-"171
-[; ;main.c: 171: void __attribute__((picinterrupt(("")))) mainISR (void)
+"196
+[; ;main.c: 196: void __attribute__((picinterrupt(("")))) mainISR (void)
 [v _mainISR `(v ~T36 @X0 1 ef ]
-"172
-[; ;main.c: 172: {
+"197
+[; ;main.c: 197: {
 {
 [e :U _mainISR ]
 [f ]
-"173
-[; ;main.c: 173:     if (INTCONbits.T0IF == 1){
-[e $ ! == -> . . _INTCONbits 1 2 `i -> 1 `i 468  ]
+"198
+[; ;main.c: 198:     if (INTCONbits.T0IF == 1){
+[e $ ! == -> . . _INTCONbits 1 2 `i -> 1 `i 479  ]
 {
-"175
-[; ;main.c: 175:         INTCONbits.T0IF=0;
+"200
+[; ;main.c: 200:         INTCONbits.T0IF=0;
 [e = . . _INTCONbits 1 2 -> -> 0 `i `uc ]
-"177
-[; ;main.c: 177:         motor_1.axis_commanded.limit_1 = PORTDbits.RD6;
+"202
+[; ;main.c: 202:         motor_1.axis_commanded.limit_1 = PORTDbits.RD6;
 [e = . . _motor_1 5 1 -> . . _PORTDbits 0 6 `a ]
-"178
-[; ;main.c: 178:         motor_1.axis_commanded.limit_2 = PORTBbits.RB1;
+"203
+[; ;main.c: 203:         motor_1.axis_commanded.limit_2 = PORTBbits.RB1;
 [e = . . _motor_1 5 2 -> . . _PORTBbits 0 1 `a ]
-"180
-[; ;main.c: 180:     }
+"204
+[; ;main.c: 204:         if(motor_1.state == ENABLED) LATEbits.LATE0 = !LATEbits.LATE0;
+[e $ ! == -> . _motor_1 1 `ui -> . `E4719 0 `ui 480  ]
+[e = . . _LATEbits 0 0 -> -> ! != -> . . _LATEbits 0 0 `i -> 0 `i `i `uc ]
+[e :U 480 ]
+"205
+[; ;main.c: 205:     }
 }
-[e :U 468 ]
-"181
-[; ;main.c: 181:     processUSBTasks();
+[e :U 479 ]
+"206
+[; ;main.c: 206:     processUSBTasks();
 [e ( _processUSBTasks ..  ]
-"182
-[; ;main.c: 182: }
-[e :UE 467 ]
+"207
+[; ;main.c: 207: }
+[e :UE 478 ]
 }
-"185
-[; ;main.c: 185: int CommandDetermine(char* line){
+"209
+[; ;main.c: 209: void Go_home(){
+[v _Go_home `(v ~T0 @X0 1 ef ]
+{
+[e :U _Go_home ]
+[f ]
+"212
+[; ;main.c: 212:     DirectionSet(&motor_1, CLOCKWISE);
+[e ( _DirectionSet (2 , &U _motor_1 . `E4715 0 ]
+"213
+[; ;main.c: 213:     motor_1.count = 0;
+[e = . _motor_1 0 -> 0 `i ]
+"214
+[; ;main.c: 214:     MotorStateSet(&motor_1, ENABLED);
+[e ( _MotorStateSet (2 , &U _motor_1 . `E4719 0 ]
+"215
+[; ;main.c: 215:     while(motor_1.axis_commanded.limit_1){
+[e $U 482  ]
+[e :U 483 ]
+{
+"217
+[; ;main.c: 217:     }
+}
+[e :U 482 ]
+"215
+[; ;main.c: 215:     while(motor_1.axis_commanded.limit_1){
+[e $ != -> . . _motor_1 5 1 `i -> 0 `i 483  ]
+[e :U 484 ]
+"218
+[; ;main.c: 218:     DirectionSet(&motor_1, UNCLOCKWISE);
+[e ( _DirectionSet (2 , &U _motor_1 . `E4715 1 ]
+"219
+[; ;main.c: 219:     while(!motor_1.axis_commanded.limit_1){
+[e $U 485  ]
+[e :U 486 ]
+{
+"221
+[; ;main.c: 221:     }
+}
+[e :U 485 ]
+"219
+[; ;main.c: 219:     while(!motor_1.axis_commanded.limit_1){
+[e $ ! != -> . . _motor_1 5 1 `i -> 0 `i 486  ]
+[e :U 487 ]
+"222
+[; ;main.c: 222:     MotorStateSet(&motor_1, DISABLED);
+[e ( _MotorStateSet (2 , &U _motor_1 . `E4719 1 ]
+"224
+[; ;main.c: 224:     motor_1.position_current = 0.0;
+[e = . _motor_1 3 -> .0.0 `f ]
+"225
+[; ;main.c: 225:     motor_1.position_set = 0.0;
+[e = . _motor_1 4 -> .0.0 `f ]
+"227
+[; ;main.c: 227:     putUSBUSART(((const __attribute__((space(prog))) char *)("X HOME ARRIVE!")),sizeof("X HOME ARRIVE!"));
+[e ( _putUSBUSART (2 , -> -> :s 3C `*Cuc `*uc -> -> 15 `ui `uc ]
+"229
+[; ;main.c: 229: }
+[e :UE 481 ]
+}
+"231
+[; ;main.c: 231: int CommandDetermine(char* line){
 [v _CommandDetermine `(i ~T0 @X0 1 ef1`*uc ]
 {
 [e :U _CommandDetermine ]
 [v _line `*uc ~T0 @X0 1 r1 ]
 [f ]
-"187
-[; ;main.c: 187:     char* token = strtok(line, " ");
+"233
+[; ;main.c: 233:     char* token = strtok(line, " ");
 [v _token `*uc ~T0 @X0 1 a ]
-[e = _token ( _strtok (2 , _line :s 3C ]
-"188
-[; ;main.c: 188:     char* endPtr;
+[e = _token ( _strtok (2 , _line :s 4C ]
+"234
+[; ;main.c: 234:     char* endPtr;
 [v _endPtr `*uc ~T0 @X0 1 a ]
-"189
-[; ;main.c: 189:     char letter;
+"235
+[; ;main.c: 235:     char letter;
 [v _letter `uc ~T0 @X0 1 a ]
-"190
-[; ;main.c: 190:     int interger;
+"236
+[; ;main.c: 236:     int interger;
 [v _interger `i ~T0 @X0 1 a ]
-"191
-[; ;main.c: 191:     _Bool invalid_command = 0;
+"237
+[; ;main.c: 237:     _Bool invalid_command = 0;
 [v _invalid_command `a ~T0 @X0 1 a ]
 [e = _invalid_command -> -> 0 `i `a ]
-"192
-[; ;main.c: 192:     int command = -1;
+"238
+[; ;main.c: 238:     int command = -1;
 [v _command `i ~T0 @X0 1 a ]
 [e = _command -U -> 1 `i ]
-"193
-[; ;main.c: 193:     while((token != ((void*)0))&&(!invalid_command)) {
-[e $U 470  ]
-[e :U 471 ]
-{
-"195
-[; ;main.c: 195:         letter = token[0];
-[e = _letter *U + _token * -> -> 0 `i `x -> -> # *U _token `i `x ]
-"196
-[; ;main.c: 196:         token[0] = '0';
-[e = *U + _token * -> -> 0 `i `x -> -> # *U _token `i `x -> -> 48 `ui `uc ]
-"198
-[; ;main.c: 198:         switch(letter){
-[e $U 474  ]
-{
-"200
-[; ;main.c: 200:             case 'G':
-[e :U 475 ]
-"202
-[; ;main.c: 202:                 interger = truncf(strtof(token, &endPtr));
-[e = _interger -> ( _truncf (1 ( _strtof (2 , -> _token `*Cuc &U _endPtr `i ]
-"203
-[; ;main.c: 203:                 switch(interger) {
-[e $U 477  ]
-{
-"204
-[; ;main.c: 204:                     case 0:
-[e :U 478 ]
-"206
-[; ;main.c: 206:                         command = 0;
-[e = _command -> 0 `i ]
-"207
-[; ;main.c: 207:                         putUSBUSART(((const __attribute__((space(prog))) char *)("G0-command arrive!\n")),sizeof("G0-command arrive!\n"));
-[e ( _putUSBUSART (2 , -> -> :s 4C `*Cuc `*uc -> -> 20 `ui `uc ]
-"209
-[; ;main.c: 209:                         break;
-[e $U 476  ]
-"210
-[; ;main.c: 210:                     case 1:
-[e :U 479 ]
-"212
-[; ;main.c: 212:                         command = 1;
-[e = _command -> 1 `i ]
-"213
-[; ;main.c: 213:                         putUSBUSART(((const __attribute__((space(prog))) char *)("G1-command arrive!\n")),sizeof("G1-command arrive!\n"));
-[e ( _putUSBUSART (2 , -> -> :s 5C `*Cuc `*uc -> -> 20 `ui `uc ]
-"215
-[; ;main.c: 215:                         break;
-[e $U 476  ]
-"216
-[; ;main.c: 216:                     case 4:
-[e :U 480 ]
-"218
-[; ;main.c: 218:                         command = 2;
-[e = _command -> 2 `i ]
-"219
-[; ;main.c: 219:                         putUSBUSART(((const __attribute__((space(prog))) char *)("G4-command arrive!\n")),sizeof("G4-command arrive!\n"));
-[e ( _putUSBUSART (2 , -> -> :s 6C `*Cuc `*uc -> -> 20 `ui `uc ]
-"221
-[; ;main.c: 221:                         break;
-[e $U 476  ]
-"222
-[; ;main.c: 222:                     case 21:
-[e :U 481 ]
-"224
-[; ;main.c: 224:                         command = 3;
-[e = _command -> 3 `i ]
-"225
-[; ;main.c: 225:                         putUSBUSART(((const __attribute__((space(prog))) char *)("G21-command arrive!\n")),sizeof("G21-command arrive!\n"));
-[e ( _putUSBUSART (2 , -> -> :s 7C `*Cuc `*uc -> -> 21 `ui `uc ]
-"227
-[; ;main.c: 227:                         break;
-[e $U 476  ]
-"228
-[; ;main.c: 228:                     case 28:
-[e :U 482 ]
-"230
-[; ;main.c: 230:                         command = 4;
-[e = _command -> 4 `i ]
-"231
-[; ;main.c: 231:                         putUSBUSART(((const __attribute__((space(prog))) char *)("G28-command arrive!\n")),sizeof("G28-command arrive!\n"));
-[e ( _putUSBUSART (2 , -> -> :s 8C `*Cuc `*uc -> -> 21 `ui `uc ]
-"233
-[; ;main.c: 233:                         break;
-[e $U 476  ]
-"234
-[; ;main.c: 234:                     case 90:
-[e :U 483 ]
-"236
-[; ;main.c: 236:                         command = 5;
-[e = _command -> 5 `i ]
-"237
-[; ;main.c: 237:                         putUSBUSART(((const __attribute__((space(prog))) char *)("G90-command arrive!\n")),sizeof("G90-command arrive!\n"));
-[e ( _putUSBUSART (2 , -> -> :s 9C `*Cuc `*uc -> -> 21 `ui `uc ]
 "239
-[; ;main.c: 239:                         break;
-[e $U 476  ]
-"240
-[; ;main.c: 240:                     case 91:
-[e :U 484 ]
-"242
-[; ;main.c: 242:                         command = 6;
-[e = _command -> 6 `i ]
-"243
-[; ;main.c: 243:                         putUSBUSART(((const __attribute__((space(prog))) char *)("G91-command arrive!\n")),sizeof("G91-command arrive!\n"));
-[e ( _putUSBUSART (2 , -> -> :s 10C `*Cuc `*uc -> -> 21 `ui `uc ]
-"245
-[; ;main.c: 245:                         break;
-[e $U 476  ]
-"246
-[; ;main.c: 246:                     case 92:
-[e :U 485 ]
-"248
-[; ;main.c: 248:                         command = 7;
-[e = _command -> 7 `i ]
-"249
-[; ;main.c: 249:                         putUSBUSART(((const __attribute__((space(prog))) char *)("G92-command arrive!\n")),sizeof("G92-command arrive!\n"));
-[e ( _putUSBUSART (2 , -> -> :s 11C `*Cuc `*uc -> -> 21 `ui `uc ]
-"251
-[; ;main.c: 251:                         break;
-[e $U 476  ]
-"252
-[; ;main.c: 252:                     default:
-[e :U 486 ]
-"253
-[; ;main.c: 253:                         putUSBUSART(((const __attribute__((space(prog))) char *)("Unsupported Command.\n")),sizeof("Unsupported Command.\n"));
-[e ( _putUSBUSART (2 , -> -> :s 12C `*Cuc `*uc -> -> 22 `ui `uc ]
-"254
-[; ;main.c: 254:                         invalid_command = 1;
-[e = _invalid_command -> -> 1 `i `a ]
-"255
-[; ;main.c: 255:                         command = -1;
-[e = _command -U -> 1 `i ]
-"256
-[; ;main.c: 256:                         break;
-[e $U 476  ]
-"258
-[; ;main.c: 258:                 }
-}
-[e $U 476  ]
-[e :U 477 ]
-[e [\ _interger , $ -> 0 `i 478
- , $ -> 1 `i 479
- , $ -> 4 `i 480
- , $ -> 21 `i 481
- , $ -> 28 `i 482
- , $ -> 90 `i 483
- , $ -> 91 `i 484
- , $ -> 92 `i 485
- 486 ]
-[e :U 476 ]
-"260
-[; ;main.c: 260:                 break;
-[e $U 473  ]
-"262
-[; ;main.c: 262:             case 'M':
-[e :U 487 ]
-"264
-[; ;main.c: 264:                 interger = truncf(strtof(token, &endPtr));
-[e = _interger -> ( _truncf (1 ( _strtof (2 , -> _token `*Cuc &U _endPtr `i ]
-"265
-[; ;main.c: 265:                 switch(interger) {
+[; ;main.c: 239:     while((token != ((void*)0))&&(!invalid_command)) {
 [e $U 489  ]
-{
-"266
-[; ;main.c: 266:                     case 0:
 [e :U 490 ]
-"268
-[; ;main.c: 268:                         command = 9;
-[e = _command -> 9 `i ]
-"269
-[; ;main.c: 269:                         putUSBUSART(((const __attribute__((space(prog))) char *)("M0-command arrive!\n")),sizeof("M0-command arrive!\n"));
-[e ( _putUSBUSART (2 , -> -> :s 13C `*Cuc `*uc -> -> 20 `ui `uc ]
-"271
-[; ;main.c: 271:                         break;
-[e $U 488  ]
-"272
-[; ;main.c: 272:                     case 1:
-[e :U 491 ]
-"274
-[; ;main.c: 274:                         command = 10;
-[e = _command -> 10 `i ]
-"275
-[; ;main.c: 275:                         putUSBUSART(((const __attribute__((space(prog))) char *)("M1-command arrive!\n")),sizeof("M1-command arrive!\n"));
-[e ( _putUSBUSART (2 , -> -> :s 14C `*Cuc `*uc -> -> 20 `ui `uc ]
-"277
-[; ;main.c: 277:                         break;
-[e $U 488  ]
-"278
-[; ;main.c: 278:                     case 2:
-[e :U 492 ]
-"280
-[; ;main.c: 280:                         command = 11;
-[e = _command -> 11 `i ]
-"281
-[; ;main.c: 281:                         putUSBUSART(((const __attribute__((space(prog))) char *)("M2-command arrive!\n")),sizeof("M2-command arrive!\n"));
-[e ( _putUSBUSART (2 , -> -> :s 15C `*Cuc `*uc -> -> 20 `ui `uc ]
-"283
-[; ;main.c: 283:                         break;
-[e $U 488  ]
-"284
-[; ;main.c: 284:                     case 84:
-[e :U 493 ]
-"286
-[; ;main.c: 286:                         command = 12;
-[e = _command -> 12 `i ]
-"287
-[; ;main.c: 287:                         putUSBUSART(((const __attribute__((space(prog))) char *)("M84-command arrive!\n")),sizeof("M84-command arrive!\n"));
-[e ( _putUSBUSART (2 , -> -> :s 16C `*Cuc `*uc -> -> 21 `ui `uc ]
-"289
-[; ;main.c: 289:                         break;
-[e $U 488  ]
-"290
-[; ;main.c: 290:                     default:
+{
+"241
+[; ;main.c: 241:         letter = token[0];
+[e = _letter *U + _token * -> -> 0 `i `x -> -> # *U _token `i `x ]
+"242
+[; ;main.c: 242:         token[0] = '0';
+[e = *U + _token * -> -> 0 `i `x -> -> # *U _token `i `x -> -> 48 `ui `uc ]
+"244
+[; ;main.c: 244:         switch(letter){
+[e $U 493  ]
+{
+"246
+[; ;main.c: 246:             case 'G':
 [e :U 494 ]
-"291
-[; ;main.c: 291:                         putUSBUSART(((const __attribute__((space(prog))) char *)("Unsupported Command.\n")),sizeof("Unsupported Command.\n"));
-[e ( _putUSBUSART (2 , -> -> :s 17C `*Cuc `*uc -> -> 22 `ui `uc ]
-"292
-[; ;main.c: 292:                         invalid_command = 1;
-[e = _invalid_command -> -> 1 `i `a ]
-"293
-[; ;main.c: 293:                         command = -1;
-[e = _command -U -> 1 `i ]
-"294
-[; ;main.c: 294:                         break;
-[e $U 488  ]
-"295
-[; ;main.c: 295:                 }
-}
-[e $U 488  ]
-[e :U 489 ]
-[e [\ _interger , $ -> 0 `i 490
- , $ -> 1 `i 491
- , $ -> 2 `i 492
- , $ -> 84 `i 493
- 494 ]
-[e :U 488 ]
-"297
-[; ;main.c: 297:                 break;
-[e $U 473  ]
-"299
-[; ;main.c: 299:             case 'X':
-[e :U 495 ]
-"303
-[; ;main.c: 303:                 break;
-[e $U 473  ]
-"305
-[; ;main.c: 305:             case 'Y':
-[e :U 496 ]
-"307
-[; ;main.c: 307:                 command = 14;
-[e = _command -> 14 `i ]
-"309
-[; ;main.c: 309:                 break;
-[e $U 473  ]
-"311
-[; ;main.c: 311:             case 'Z':
+"248
+[; ;main.c: 248:                 interger = truncf(strtof(token, &endPtr));
+[e = _interger -> ( _truncf (1 ( _strtof (2 , -> _token `*Cuc &U _endPtr `i ]
+"249
+[; ;main.c: 249:                 switch(interger) {
+[e $U 496  ]
+{
+"250
+[; ;main.c: 250:                     case 0:
 [e :U 497 ]
-"313
-[; ;main.c: 313:                 PrintMotorDirConfig(&motor_1);
-[e ( _PrintMotorDirConfig (1 &U _motor_1 ]
-"315
-[; ;main.c: 315:                 break;
-[e $U 473  ]
-"317
-[; ;main.c: 317:             case 'F':
+"252
+[; ;main.c: 252:                         command = 0;
+[e = _command -> 0 `i ]
+"253
+[; ;main.c: 253:                         putUSBUSART(((const __attribute__((space(prog))) char *)("G0-command arrive!\n")),sizeof("G0-command arrive!\n"));
+[e ( _putUSBUSART (2 , -> -> :s 5C `*Cuc `*uc -> -> 20 `ui `uc ]
+"255
+[; ;main.c: 255:                         break;
+[e $U 495  ]
+"256
+[; ;main.c: 256:                     case 1:
 [e :U 498 ]
-"319
-[; ;main.c: 319:                 break;
-[e $U 473  ]
-"321
-[; ;main.c: 321:             default:
+"258
+[; ;main.c: 258:                         command = 1;
+[e = _command -> 1 `i ]
+"261
+[; ;main.c: 261:                         break;
+[e $U 495  ]
+"262
+[; ;main.c: 262:                     case 4:
 [e :U 499 ]
-"322
-[; ;main.c: 322:                 invalid_command = 1;
-[e = _invalid_command -> -> 1 `i `a ]
-"323
-[; ;main.c: 323:                 putUSBUSART(((const __attribute__((space(prog))) char *)("Unsupported Command.\n")),sizeof("Unsupported Command.\n"));
-[e ( _putUSBUSART (2 , -> -> :s 18C `*Cuc `*uc -> -> 22 `ui `uc ]
-"324
-[; ;main.c: 324:                 command = -1;
-[e = _command -U -> 1 `i ]
-"325
-[; ;main.c: 325:                 break;
-[e $U 473  ]
-"326
-[; ;main.c: 326:         }
-}
-[e $U 473  ]
-[e :U 474 ]
-[e [\ -> _letter `i , $ -> -> 71 `ui `i 475
- , $ -> -> 77 `ui `i 487
- , $ -> -> 88 `ui `i 495
- , $ -> -> 89 `ui `i 496
- , $ -> -> 90 `ui `i 497
- , $ -> -> 70 `ui `i 498
- 499 ]
-[e :U 473 ]
-"328
-[; ;main.c: 328:         token = strtok(((void*)0), " ");
-[e = _token ( _strtok (2 , -> -> -> 0 `i `*v `*uc :s 19C ]
-"330
-[; ;main.c: 330:     }
-}
-[e :U 470 ]
-"193
-[; ;main.c: 193:     while((token != ((void*)0))&&(!invalid_command)) {
-[e $ && != _token -> -> -> 0 `i `*v `*uc ! != -> _invalid_command `i -> 0 `i 471  ]
-[e :U 472 ]
-"332
-[; ;main.c: 332:     return command;
-[e ) _command ]
-[e $UE 469  ]
-"335
-[; ;main.c: 335: }
-[e :UE 469 ]
-}
-"337
-[; ;main.c: 337: void G_CommandExecute(int command){
-[v _G_CommandExecute `(v ~T0 @X0 1 ef1`i ]
-{
-[e :U _G_CommandExecute ]
-[v _command `i ~T0 @X0 1 r1 ]
-[f ]
-"339
-[; ;main.c: 339:     switch(command){
-[e $U 502  ]
-{
-"340
-[; ;main.c: 340:         case 0:
-[e :U 503 ]
-"342
-[; ;main.c: 342:             break;
-[e $U 501  ]
-"343
-[; ;main.c: 343:         case 1:
-[e :U 504 ]
-"345
-[; ;main.c: 345:             break;
-[e $U 501  ]
-"346
-[; ;main.c: 346:         case 2:
-[e :U 505 ]
-"348
-[; ;main.c: 348:             break;
-[e $U 501  ]
-"349
-[; ;main.c: 349:         case 3:
-[e :U 506 ]
-"351
-[; ;main.c: 351:             break;
-[e $U 501  ]
-"352
-[; ;main.c: 352:         case 4:
-[e :U 507 ]
-"354
-[; ;main.c: 354:             break;
-[e $U 501  ]
-"355
-[; ;main.c: 355:         case 5:
-[e :U 508 ]
-"357
-[; ;main.c: 357:             break;
-[e $U 501  ]
-"358
-[; ;main.c: 358:         case 6:
-[e :U 509 ]
-"360
-[; ;main.c: 360:             break;
-[e $U 501  ]
-"361
-[; ;main.c: 361:         case 7:
-[e :U 510 ]
-"363
-[; ;main.c: 363:             break;
-[e $U 501  ]
-"364
-[; ;main.c: 364:         case 8:
-[e :U 511 ]
-"366
-[; ;main.c: 366:             break;
-[e $U 501  ]
-"367
-[; ;main.c: 367:     }
-}
-[e $U 501  ]
-[e :U 502 ]
-[e [\ _command , $ -> 0 `i 503
- , $ -> 1 `i 504
- , $ -> 2 `i 505
- , $ -> 3 `i 506
- , $ -> 4 `i 507
- , $ -> 5 `i 508
- , $ -> 6 `i 509
- , $ -> 7 `i 510
- , $ -> 8 `i 511
- 501 ]
+"264
+[; ;main.c: 264:                         command = 2;
+[e = _command -> 2 `i ]
+"267
+[; ;main.c: 267:                         break;
+[e $U 495  ]
+"268
+[; ;main.c: 268:                     case 21:
+[e :U 500 ]
+"270
+[; ;main.c: 270:                         command = 3;
+[e = _command -> 3 `i ]
+"273
+[; ;main.c: 273:                         break;
+[e $U 495  ]
+"274
+[; ;main.c: 274:                     case 28:
 [e :U 501 ]
-"369
-[; ;main.c: 369: }
-[e :UE 500 ]
+"276
+[; ;main.c: 276:                         command = 4;
+[e = _command -> 4 `i ]
+"279
+[; ;main.c: 279:                         break;
+[e $U 495  ]
+"280
+[; ;main.c: 280:                     case 90:
+[e :U 502 ]
+"282
+[; ;main.c: 282:                         command = 5;
+[e = _command -> 5 `i ]
+"285
+[; ;main.c: 285:                         break;
+[e $U 495  ]
+"286
+[; ;main.c: 286:                     case 91:
+[e :U 503 ]
+"288
+[; ;main.c: 288:                         command = 6;
+[e = _command -> 6 `i ]
+"291
+[; ;main.c: 291:                         break;
+[e $U 495  ]
+"292
+[; ;main.c: 292:                     case 92:
+[e :U 504 ]
+"294
+[; ;main.c: 294:                         command = 7;
+[e = _command -> 7 `i ]
+"297
+[; ;main.c: 297:                         break;
+[e $U 495  ]
+"298
+[; ;main.c: 298:                     default:
+[e :U 505 ]
+"299
+[; ;main.c: 299:                         putUSBUSART(((const __attribute__((space(prog))) char *)("Unsupported Command.\n")),sizeof("Unsupported Command.\n"));
+[e ( _putUSBUSART (2 , -> -> :s 6C `*Cuc `*uc -> -> 22 `ui `uc ]
+"300
+[; ;main.c: 300:                         invalid_command = 1;
+[e = _invalid_command -> -> 1 `i `a ]
+"301
+[; ;main.c: 301:                         command = -1;
+[e = _command -U -> 1 `i ]
+"302
+[; ;main.c: 302:                         break;
+[e $U 495  ]
+"304
+[; ;main.c: 304:                 }
 }
-"371
-[; ;main.c: 371: void M_CommandExecute(int command){
-[v _M_CommandExecute `(v ~T0 @X0 1 ef1`i ]
+[e $U 495  ]
+[e :U 496 ]
+[e [\ _interger , $ -> 0 `i 497
+ , $ -> 1 `i 498
+ , $ -> 4 `i 499
+ , $ -> 21 `i 500
+ , $ -> 28 `i 501
+ , $ -> 90 `i 502
+ , $ -> 91 `i 503
+ , $ -> 92 `i 504
+ 505 ]
+[e :U 495 ]
+"306
+[; ;main.c: 306:                 break;
+[e $U 492  ]
+"308
+[; ;main.c: 308:             case 'M':
+[e :U 506 ]
+"310
+[; ;main.c: 310:                 interger = truncf(strtof(token, &endPtr));
+[e = _interger -> ( _truncf (1 ( _strtof (2 , -> _token `*Cuc &U _endPtr `i ]
+"311
+[; ;main.c: 311:                 switch(interger) {
+[e $U 508  ]
 {
-[e :U _M_CommandExecute ]
-[v _command `i ~T0 @X0 1 r1 ]
-[f ]
-"373
-[; ;main.c: 373:     switch(command){
-[e $U 514  ]
-{
-"374
-[; ;main.c: 374:         case 9:
-[e :U 515 ]
-"376
-[; ;main.c: 376:             break;
-[e $U 513  ]
-"377
-[; ;main.c: 377:         case 10:
-[e :U 516 ]
-"379
-[; ;main.c: 379:             break;
-[e $U 513  ]
-"380
-[; ;main.c: 380:         case 11:
-[e :U 517 ]
-"382
-[; ;main.c: 382:             break;
-[e $U 513  ]
-"383
-[; ;main.c: 383:         case 12:
-[e :U 518 ]
-"386
-[; ;main.c: 386:             MotorStateSet(&motor_1, DISABLED);
-[e ( _MotorStateSet (2 , &U _motor_1 . `E4717 1 ]
-"388
-[; ;main.c: 388:             break;
-[e $U 513  ]
-"389
-[; ;main.c: 389:         case 13:
-[e :U 519 ]
-"391
-[; ;main.c: 391:             break;
-[e $U 513  ]
-"392
-[; ;main.c: 392:     }
-}
-[e $U 513  ]
-[e :U 514 ]
-[e [\ _command , $ -> 9 `i 515
- , $ -> 10 `i 516
- , $ -> 11 `i 517
- , $ -> 12 `i 518
- , $ -> 13 `i 519
- 513 ]
+"312
+[; ;main.c: 312:                     case 0:
+[e :U 509 ]
+"314
+[; ;main.c: 314:                         command = 9;
+[e = _command -> 9 `i ]
+"317
+[; ;main.c: 317:                         break;
+[e $U 507  ]
+"318
+[; ;main.c: 318:                     case 1:
+[e :U 510 ]
+"320
+[; ;main.c: 320:                         command = 10;
+[e = _command -> 10 `i ]
+"323
+[; ;main.c: 323:                         break;
+[e $U 507  ]
+"324
+[; ;main.c: 324:                     case 2:
+[e :U 511 ]
+"326
+[; ;main.c: 326:                         command = 11;
+[e = _command -> 11 `i ]
+"329
+[; ;main.c: 329:                         break;
+[e $U 507  ]
+"330
+[; ;main.c: 330:                     case 84:
+[e :U 512 ]
+"332
+[; ;main.c: 332:                         command = 12;
+[e = _command -> 12 `i ]
+"335
+[; ;main.c: 335:                         break;
+[e $U 507  ]
+"336
+[; ;main.c: 336:                     default:
 [e :U 513 ]
-"394
-[; ;main.c: 394: }
-[e :UE 512 ]
+"337
+[; ;main.c: 337:                         putUSBUSART(((const __attribute__((space(prog))) char *)("Unsupported Command.\n")),sizeof("Unsupported Command.\n"));
+[e ( _putUSBUSART (2 , -> -> :s 7C `*Cuc `*uc -> -> 22 `ui `uc ]
+"338
+[; ;main.c: 338:                         invalid_command = 1;
+[e = _invalid_command -> -> 1 `i `a ]
+"339
+[; ;main.c: 339:                         command = -1;
+[e = _command -U -> 1 `i ]
+"340
+[; ;main.c: 340:                         break;
+[e $U 507  ]
+"341
+[; ;main.c: 341:                 }
 }
-"396
-[; ;main.c: 396: void Custom_CommandExecute(int command){
-[v _Custom_CommandExecute `(v ~T0 @X0 1 ef1`i ]
-{
-[e :U _Custom_CommandExecute ]
-[v _command `i ~T0 @X0 1 r1 ]
-[f ]
-"398
-[; ;main.c: 398:     switch(command){
-[e $U 522  ]
-{
-"399
-[; ;main.c: 399:         case 14:
-[e :U 523 ]
-"401
-[; ;main.c: 401:             putUSBUSART(((const __attribute__((space(prog))) char *)("TOGGLE OUTPUT RELAY\n")),sizeof("TOGGLE OUTPUT RELAY\n"));
-[e ( _putUSBUSART (2 , -> -> :s 20C `*Cuc `*uc -> -> 21 `ui `uc ]
-"402
-[; ;main.c: 402:             LATCbits.LATC2 = !LATCbits.LATC2;
-[e = . . _LATCbits 0 2 -> -> ! != -> . . _LATCbits 0 2 `i -> 0 `i `i `uc ]
-"404
-[; ;main.c: 404:             break;
-[e $U 521  ]
-"405
-[; ;main.c: 405:         case 15:
-[e :U 524 ]
-"407
-[; ;main.c: 407:             break;
-[e $U 521  ]
-"408
-[; ;main.c: 408:     }
+[e $U 507  ]
+[e :U 508 ]
+[e [\ _interger , $ -> 0 `i 509
+ , $ -> 1 `i 510
+ , $ -> 2 `i 511
+ , $ -> 84 `i 512
+ 513 ]
+[e :U 507 ]
+"343
+[; ;main.c: 343:                 break;
+[e $U 492  ]
+"345
+[; ;main.c: 345:             case 'X':
+[e :U 514 ]
+"349
+[; ;main.c: 349:                 break;
+[e $U 492  ]
+"351
+[; ;main.c: 351:             case 'Y':
+[e :U 515 ]
+"353
+[; ;main.c: 353:                 command = 14;
+[e = _command -> 14 `i ]
+"355
+[; ;main.c: 355:                 break;
+[e $U 492  ]
+"357
+[; ;main.c: 357:             case 'Z':
+[e :U 516 ]
+"359
+[; ;main.c: 359:                 PrintMotorDirConfig(&motor_1);
+[e ( _PrintMotorDirConfig (1 &U _motor_1 ]
+"361
+[; ;main.c: 361:                 break;
+[e $U 492  ]
+"363
+[; ;main.c: 363:             case 'F':
+[e :U 517 ]
+"365
+[; ;main.c: 365:                 break;
+[e $U 492  ]
+"367
+[; ;main.c: 367:             default:
+[e :U 518 ]
+"368
+[; ;main.c: 368:                 invalid_command = 1;
+[e = _invalid_command -> -> 1 `i `a ]
+"369
+[; ;main.c: 369:                 putUSBUSART(((const __attribute__((space(prog))) char *)("Unsupported Command.\n")),sizeof("Unsupported Command.\n"));
+[e ( _putUSBUSART (2 , -> -> :s 8C `*Cuc `*uc -> -> 22 `ui `uc ]
+"370
+[; ;main.c: 370:                 command = -1;
+[e = _command -U -> 1 `i ]
+"371
+[; ;main.c: 371:                 break;
+[e $U 492  ]
+"372
+[; ;main.c: 372:         }
 }
-[e $U 521  ]
-[e :U 522 ]
-[e [\ _command , $ -> 14 `i 523
- , $ -> 15 `i 524
- 521 ]
-[e :U 521 ]
-"410
-[; ;main.c: 410: }
-[e :UE 520 ]
+[e $U 492  ]
+[e :U 493 ]
+[e [\ -> _letter `i , $ -> -> 71 `ui `i 494
+ , $ -> -> 77 `ui `i 506
+ , $ -> -> 88 `ui `i 514
+ , $ -> -> 89 `ui `i 515
+ , $ -> -> 90 `ui `i 516
+ , $ -> -> 70 `ui `i 517
+ 518 ]
+[e :U 492 ]
+"374
+[; ;main.c: 374:         token = strtok(((void*)0), " ");
+[e = _token ( _strtok (2 , -> -> -> 0 `i `*v `*uc :s 9C ]
+"376
+[; ;main.c: 376:     }
 }
-"413
-[; ;main.c: 413: int command;
+[e :U 489 ]
+"239
+[; ;main.c: 239:     while((token != ((void*)0))&&(!invalid_command)) {
+[e $ && != _token -> -> -> 0 `i `*v `*uc ! != -> _invalid_command `i -> 0 `i 490  ]
+[e :U 491 ]
+"378
+[; ;main.c: 378:     if(command == 4) Go_home();
+[e $ ! == _command -> 4 `i 519  ]
+[e ( _Go_home ..  ]
+[e :U 519 ]
+"379
+[; ;main.c: 379:     return command;
+[e ) _command ]
+[e $UE 488  ]
+"382
+[; ;main.c: 382: }
+[e :UE 488 ]
+}
+"385
+[; ;main.c: 385: int command;
 [v _command `i ~T0 @X0 1 e ]
-"415
-[; ;main.c: 415: void protocol_main_loop(void)
+"387
+[; ;main.c: 387: void protocol_main_loop(void)
 [v _protocol_main_loop `(v ~T0 @X0 1 ef ]
-"416
-[; ;main.c: 416: {
+"388
+[; ;main.c: 388: {
 {
 [e :U _protocol_main_loop ]
 [f ]
-"417
-[; ;main.c: 417:     if(MEF_DataArrive()){
-[e $ ! != -> ( _MEF_DataArrive ..  `i -> 0 `i 526  ]
+"390
+[; ;main.c: 390:     if(MEF_DataArrive()){
+[e $ ! != -> ( _MEF_DataArrive ..  `i -> 0 `i 521  ]
 {
-"418
-[; ;main.c: 418:         command = CommandDetermine(usbReadBuffer);
+"391
+[; ;main.c: 391:         command = CommandDetermine(usbReadBuffer);
 [e = _command ( _CommandDetermine (1 -> &U _usbReadBuffer `*uc ]
-"419
-[; ;main.c: 419:     }
+"392
+[; ;main.c: 392:     }
 }
-[e :U 526 ]
-"421
-[; ;main.c: 421:     G_CommandExecute(command);
-[e ( _G_CommandExecute (1 _command ]
-"422
-[; ;main.c: 422:     M_CommandExecute(command);
-[e ( _M_CommandExecute (1 _command ]
-"423
-[; ;main.c: 423:     Custom_CommandExecute(command);
-[e ( _Custom_CommandExecute (1 _command ]
-"425
-[; ;main.c: 425:     CDCTxService();
+[e :U 521 ]
+"394
+[; ;main.c: 394:     CDCTxService();
 [e ( _CDCTxService ..  ]
-"445
-[; ;main.c: 445:     return;
-[e $UE 525  ]
-"446
-[; ;main.c: 446: }
-[e :UE 525 ]
+"396
+[; ;main.c: 396:     return;
+[e $UE 520  ]
+"398
+[; ;main.c: 398: }
+[e :UE 520 ]
 }
-"453
-[; ;main.c: 453: uint8_t numBytesRead;
+"405
+[; ;main.c: 405: uint8_t numBytesRead;
 [v _numBytesRead `uc ~T0 @X0 1 e ]
-"454
-[; ;main.c: 454: _Bool dataIn = 0;
+"406
+[; ;main.c: 406: _Bool dataIn = 0;
 [v _dataIn `a ~T0 @X0 1 e ]
 [i _dataIn
 -> -> 0 `i `a
 ]
-"456
-[; ;main.c: 456: _Bool MEF_DataArrive(void){
+"408
+[; ;main.c: 408: _Bool MEF_DataArrive(void){
 [v _MEF_DataArrive `(a ~T0 @X0 1 ef ]
 {
 [e :U _MEF_DataArrive ]
 [f ]
-"458
-[; ;main.c: 458:     static estMefDataArrive_enum estMefDataArrive = EST_MEF_DATA_INIT;
-[v F4774 `E4767 ~T0 @X0 1 s estMefDataArrive ]
-[i F4774
-. `E4767 0
+"410
+[; ;main.c: 410:     static estMefDataArrive_enum estMefDataArrive = EST_MEF_DATA_INIT;
+[v F4777 `E4770 ~T0 @X0 1 s estMefDataArrive ]
+[i F4777
+. `E4770 0
 ]
-"460
-[; ;main.c: 460:     switch(estMefDataArrive){
-[e $U 529  ]
+"412
+[; ;main.c: 412:     switch(estMefDataArrive){
+[e $U 524  ]
 {
-"462
-[; ;main.c: 462:         case EST_MEF_DATA_INIT:
-[e :U 530 ]
-"464
-[; ;main.c: 464:             dataIn = 0;
+"414
+[; ;main.c: 414:         case EST_MEF_DATA_INIT:
+[e :U 525 ]
+"416
+[; ;main.c: 416:             dataIn = 0;
 [e = _dataIn -> -> 0 `i `a ]
-"465
-[; ;main.c: 465:             numBytesRead = getsUSBUSART(usbReadBuffer, sizeof(usbReadBuffer));
+"417
+[; ;main.c: 417:             numBytesRead = getsUSBUSART(usbReadBuffer, sizeof(usbReadBuffer));
 [e = _numBytesRead ( _getsUSBUSART (2 , &U _usbReadBuffer -> -> # _usbReadBuffer `ui `uc ]
-"466
-[; ;main.c: 466:             if(numBytesRead > 0) {
-[e $ ! > -> _numBytesRead `i -> 0 `i 531  ]
+"418
+[; ;main.c: 418:             if(numBytesRead > 0) {
+[e $ ! > -> _numBytesRead `i -> 0 `i 526  ]
 {
-"467
-[; ;main.c: 467:                 estMefDataArrive = EST_MEF_DATA_WAIT;
-[e = F4774 . `E4767 1 ]
-"468
-[; ;main.c: 468:             }
+"419
+[; ;main.c: 419:                 estMefDataArrive = EST_MEF_DATA_CHECK_END;
+[e = F4777 . `E4770 1 ]
+"420
+[; ;main.c: 420:             }
 }
-[e :U 531 ]
-"469
-[; ;main.c: 469:             break;
-[e $U 528  ]
-"471
-[; ;main.c: 471:         case EST_MEF_DATA_WAIT:
-[e :U 532 ]
-"473
-[; ;main.c: 473:             if ((usbReadBuffer[numBytesRead-1] == '\n') || (usbReadBuffer[numBytesRead-1] == '\r')) {
-[e $ ! || == -> *U + &U _usbReadBuffer * -> -> - -> _numBytesRead `i -> 1 `i `ui `ux -> -> # *U &U _usbReadBuffer `ui `ux `ui -> 10 `ui == -> *U + &U _usbReadBuffer * -> -> - -> _numBytesRead `i -> 1 `i `ui `ux -> -> # *U &U _usbReadBuffer `ui `ux `ui -> 13 `ui 533  ]
+[e :U 526 ]
+"421
+[; ;main.c: 421:             break;
+[e $U 523  ]
+"423
+[; ;main.c: 423:         case EST_MEF_DATA_CHECK_END:
+[e :U 527 ]
+"425
+[; ;main.c: 425:             if ((usbReadBuffer[numBytesRead-1] == '\n') || (usbReadBuffer[numBytesRead-1] == '\r')) {
+[e $ ! || == -> *U + &U _usbReadBuffer * -> -> - -> _numBytesRead `i -> 1 `i `ui `ux -> -> # *U &U _usbReadBuffer `ui `ux `ui -> 10 `ui == -> *U + &U _usbReadBuffer * -> -> - -> _numBytesRead `i -> 1 `i `ui `ux -> -> # *U &U _usbReadBuffer `ui `ux `ui -> 13 `ui 528  ]
 {
-"474
-[; ;main.c: 474:                 estMefDataArrive = EST_MEF_DATA_INIT;
-[e = F4774 . `E4767 0 ]
-"475
-[; ;main.c: 475:                 dataIn = 1;
+"426
+[; ;main.c: 426:                 estMefDataArrive = EST_MEF_DATA_INIT;
+[e = F4777 . `E4770 0 ]
+"427
+[; ;main.c: 427:                 dataIn = 1;
 [e = _dataIn -> -> 1 `i `a ]
-"476
-[; ;main.c: 476:             }
+"428
+[; ;main.c: 428:             }else{
 }
-[e :U 533 ]
-"477
-[; ;main.c: 477:             break;
-[e $U 528  ]
-"479
-[; ;main.c: 479:         default:
-[e :U 534 ]
-"480
-[; ;main.c: 480:             estMefDataArrive = EST_MEF_DATA_INIT;
-[e = F4774 . `E4767 0 ]
-"481
-[; ;main.c: 481:             break;
-[e $U 528  ]
-"483
-[; ;main.c: 483:     }
-}
-[e $U 528  ]
-[e :U 529 ]
-[e [\ -> F4774 `ui , $ -> . `E4767 0 `ui 530
- , $ -> . `E4767 1 `ui 532
- 534 ]
+[e $U 529  ]
 [e :U 528 ]
-"485
-[; ;main.c: 485: }
-[e :UE 527 ]
+{
+"429
+[; ;main.c: 429:                 estMefDataArrive = EST_MEF_DATA_INIT;
+[e = F4777 . `E4770 0 ]
+"430
+[; ;main.c: 430:             }
 }
-[a 3C 32 0 ]
-[a 19C 32 0 ]
-[a 20C 84 79 71 71 76 69 32 79 85 84 80 85 84 32 82 69 76 65 89 10 0 ]
+[e :U 529 ]
+"431
+[; ;main.c: 431:             break;
+[e $U 523  ]
+"433
+[; ;main.c: 433:         default:
+[e :U 530 ]
+"434
+[; ;main.c: 434:             estMefDataArrive = EST_MEF_DATA_INIT;
+[e = F4777 . `E4770 0 ]
+"435
+[; ;main.c: 435:             break;
+[e $U 523  ]
+"437
+[; ;main.c: 437:     }
+}
+[e $U 523  ]
+[e :U 524 ]
+[e [\ -> F4777 `ui , $ -> . `E4770 0 `ui 525
+ , $ -> . `E4770 1 `ui 527
+ 530 ]
+[e :U 523 ]
+"439
+[; ;main.c: 439: }
+[e :UE 522 ]
+}
+[a 3C 88 32 72 79 77 69 32 65 82 82 73 86 69 33 0 ]
+[a 4C 32 0 ]
+[a 9C 32 0 ]
 [a 2C 68 105 114 101 99 116 105 111 110 58 32 85 78 67 76 79 67 75 87 73 83 69 10 0 ]
 [a 1C 68 105 114 101 99 116 105 111 110 58 32 67 76 79 67 75 87 73 83 69 10 0 ]
-[a 12C 85 110 115 117 112 112 111 114 116 101 100 32 67 111 109 109 97 110 100 46 10 0 ]
-[a 17C 85 110 115 117 112 112 111 114 116 101 100 32 67 111 109 109 97 110 100 46 10 0 ]
-[a 18C 85 110 115 117 112 112 111 114 116 101 100 32 67 111 109 109 97 110 100 46 10 0 ]
-[a 8C 71 50 56 45 99 111 109 109 97 110 100 32 97 114 114 105 118 101 33 10 0 ]
-[a 6C 71 52 45 99 111 109 109 97 110 100 32 97 114 114 105 118 101 33 10 0 ]
-[a 16C 77 56 52 45 99 111 109 109 97 110 100 32 97 114 114 105 118 101 33 10 0 ]
-[a 15C 77 50 45 99 111 109 109 97 110 100 32 97 114 114 105 118 101 33 10 0 ]
-[a 11C 71 57 50 45 99 111 109 109 97 110 100 32 97 114 114 105 118 101 33 10 0 ]
-[a 14C 77 49 45 99 111 109 109 97 110 100 32 97 114 114 105 118 101 33 10 0 ]
-[a 5C 71 49 45 99 111 109 109 97 110 100 32 97 114 114 105 118 101 33 10 0 ]
-[a 10C 71 57 49 45 99 111 109 109 97 110 100 32 97 114 114 105 118 101 33 10 0 ]
-[a 7C 71 50 49 45 99 111 109 109 97 110 100 32 97 114 114 105 118 101 33 10 0 ]
-[a 13C 77 48 45 99 111 109 109 97 110 100 32 97 114 114 105 118 101 33 10 0 ]
-[a 4C 71 48 45 99 111 109 109 97 110 100 32 97 114 114 105 118 101 33 10 0 ]
-[a 9C 71 57 48 45 99 111 109 109 97 110 100 32 97 114 114 105 118 101 33 10 0 ]
+[a 6C 85 110 115 117 112 112 111 114 116 101 100 32 67 111 109 109 97 110 100 46 10 0 ]
+[a 7C 85 110 115 117 112 112 111 114 116 101 100 32 67 111 109 109 97 110 100 46 10 0 ]
+[a 8C 85 110 115 117 112 112 111 114 116 101 100 32 67 111 109 109 97 110 100 46 10 0 ]
+[a 5C 71 48 45 99 111 109 109 97 110 100 32 97 114 114 105 118 101 33 10 0 ]

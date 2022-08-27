@@ -146,8 +146,29 @@ void PrintMotorDirConfig(motor *M){
         putUSBUSART(PSTR("Direction: UNCLOCKWISE\n"),sizeof("Direction: UNCLOCKWISE\n"));
     }
     
-    
-    
+}
+
+#define TMR0L_Reg_FEED_RATE_LOW 208 //1mSeg.
+#define TMR0L_Reg_FEED_RATE_HIGH 254 //21uSeg.
+
+unsigned char FR_current = TMR0L_Reg_FEED_RATE_LOW;
+unsigned char FR_set = TMR0L_Reg_FEED_RATE_LOW;
+
+void FeedRate_SetValue(unsigned char FR_value_set){
+    if (FR_value_set > FR_current){
+        //aceleracion
+        for (unsigned char i = FR_current; i <= FR_value_set; i++){
+            TIMER0_Set_TMR0L_Reg(i);
+            __delay_ms(100); 
+        }
+    }else{
+        //desaceleracion
+        for (unsigned char i = FR_value_set; i >= FR_current; i--){
+            TIMER0_Set_TMR0L_Reg(i);
+            __delay_ms(100);
+        }
+    }
+    FR_current = FR_value_set;
 }
 
 void main(void) 
@@ -156,6 +177,8 @@ void main(void)
     Motors_Init();
     
     initUSBLib();
+    Timer0_Init();
+    TIMER0_Set_TMR0L_Reg(TMR0L_Reg_FEED_RATE_LOW);
     
     while(1)
     {
@@ -168,6 +191,8 @@ void main(void)
     return;
 }
 
+
+
 void __interrupt() mainISR (void)
 {
     if (INTCONbits.T0IF == 1){
@@ -176,11 +201,32 @@ void __interrupt() mainISR (void)
         
         motor_1.axis_commanded.limit_1 = LIMIT_X1_STATE;
         motor_1.axis_commanded.limit_2 = LIMIT_X2_STATE;
-        
+        if(motor_1.state == ENABLED) STEP_X_AXIS_STATE = !STEP_X_AXIS_STATE;
     }
     processUSBTasks();
 }
 
+void Go_home(){
+    
+    // -----------------MOTOR 1 - AXIS X HOME RUTINE-------------------
+    DirectionSet(&motor_1, CLOCKWISE);
+    motor_1.count = 0;
+    MotorStateSet(&motor_1, ENABLED);
+    while(motor_1.axis_commanded.limit_1){
+        
+    }
+    DirectionSet(&motor_1, UNCLOCKWISE);
+    while(!motor_1.axis_commanded.limit_1){
+        
+    }
+    MotorStateSet(&motor_1, DISABLED);
+    
+    motor_1.position_current = 0.0;
+    motor_1.position_set = 0.0;
+    
+    putUSBUSART(PSTR("X HOME ARRIVE!"),sizeof("X HOME ARRIVE!"));
+    
+}
 
 int CommandDetermine(char* line){
 
@@ -210,43 +256,43 @@ int CommandDetermine(char* line){
                     case 1: // ------------------------------------ G1 commands
                         
                         command = G1_COMMAND;
-                        putUSBUSART(PSTR("G1-command arrive!\n"),sizeof("G1-command arrive!\n"));
+                        //putUSBUSART(PSTR("G1-command arrive!\n"),sizeof("G1-command arrive!\n"));
                      
                         break;
                     case 4: // ------------------------------------ G4 commands
                         
                         command = G4_COMMAND;
-                        putUSBUSART(PSTR("G4-command arrive!\n"),sizeof("G4-command arrive!\n"));
+                        //putUSBUSART(PSTR("G4-command arrive!\n"),sizeof("G4-command arrive!\n"));
                         
                         break;
                     case 21: // ----------------------------------- G21 commands
                         
                         command = G21_COMMAND;
-                        putUSBUSART(PSTR("G21-command arrive!\n"),sizeof("G21-command arrive!\n"));
+                        //putUSBUSART(PSTR("G21-command arrive!\n"),sizeof("G21-command arrive!\n"));
                         
                         break;
                     case 28: // ----------------------------------- G28 commands
                         
                         command = G28_COMMAND;
-                        putUSBUSART(PSTR("G28-command arrive!\n"),sizeof("G28-command arrive!\n"));
+                        //putUSBUSART(PSTR("G28-command arrive!\n"),sizeof("G28-command arrive!\n"));
                         
                         break;
                     case 90: // ----------------------------------- G90 commands
                         
                         command = G90_COMMAND;
-                        putUSBUSART(PSTR("G90-command arrive!\n"),sizeof("G90-command arrive!\n"));
+                        //putUSBUSART(PSTR("G90-command arrive!\n"),sizeof("G90-command arrive!\n"));
                         
                         break;
                     case 91: // ----------------------------------- G91 commands
                         
                         command = G91_COMMAND;
-                        putUSBUSART(PSTR("G91-command arrive!\n"),sizeof("G91-command arrive!\n"));
+                        //putUSBUSART(PSTR("G91-command arrive!\n"),sizeof("G91-command arrive!\n"));
                         
                         break;
                     case 92: // ----------------------------------- G92 commands
                         
                         command = G92_COMMAND;
-                        putUSBUSART(PSTR("G92-command arrive!\n"),sizeof("G92-command arrive!\n"));
+                        //putUSBUSART(PSTR("G92-command arrive!\n"),sizeof("G92-command arrive!\n"));
                         
                         break;
                     default:
@@ -266,25 +312,25 @@ int CommandDetermine(char* line){
                     case 0: // ------------------------------------ M0 commands
                         
                         command = M0_COMMAND;
-                        putUSBUSART(PSTR("M0-command arrive!\n"),sizeof("M0-command arrive!\n"));
+                        //putUSBUSART(PSTR("M0-command arrive!\n"),sizeof("M0-command arrive!\n"));
                         
                         break;
                     case 1: // ------------------------------------ M1 commands
                         
                         command = M1_COMMAND;
-                        putUSBUSART(PSTR("M1-command arrive!\n"),sizeof("M1-command arrive!\n"));
+                        //putUSBUSART(PSTR("M1-command arrive!\n"),sizeof("M1-command arrive!\n"));
                        
                         break;
                     case 2: // ------------------------------------ M2 commands
                         
                         command = M2_COMMAND;
-                        putUSBUSART(PSTR("M2-command arrive!\n"),sizeof("M2-command arrive!\n"));
+                        //putUSBUSART(PSTR("M2-command arrive!\n"),sizeof("M2-command arrive!\n"));
                         
                         break;
                     case 84: // ----------------------------------- M84 commands
                         
                         command = M84_COMMAND;
-                        putUSBUSART(PSTR("M84-command arrive!\n"),sizeof("M84-command arrive!\n"));
+                        //putUSBUSART(PSTR("M84-command arrive!\n"),sizeof("M84-command arrive!\n"));
                         
                         break;
                     default:
@@ -329,84 +375,10 @@ int CommandDetermine(char* line){
 
     }
     
+    if(command == G28_COMMAND) Go_home();
     return command;
     //End of command frame analysis!!
 
-}
-
-void G_CommandExecute(int command){
-    
-    switch(command){
-        case G0_COMMAND:
-            
-            break;
-        case G1_COMMAND:
-            
-            break;
-        case G4_COMMAND:
-            
-            break;
-        case G21_COMMAND:
-            
-            break;
-        case G28_COMMAND:
-            
-            break;
-        case G90_COMMAND:
-            
-            break;
-        case G91_COMMAND:
-            
-            break;
-        case G92_COMMAND:
-            
-            break;
-        case G94_COMMAND:
-            
-            break;
-    }
-    
-}
-
-void M_CommandExecute(int command){
-    
-    switch(command){
-        case M0_COMMAND:
-            
-            break;
-        case M1_COMMAND:
-            
-            break;
-        case M2_COMMAND:
-            
-            break;
-        case M84_COMMAND:
-            
-            //putUSBUSART(PSTR("All motors OFF\n"),sizeof("All motors OFF\n"));
-            MotorStateSet(&motor_1, DISABLED);
-            
-            break;
-        case M117_COMMAND:
-            
-            break;
-    }
-    
-}
-
-void Custom_CommandExecute(int command){
-    
-    switch(command){
-        case CUSTOM_COMMAND_1:
-            
-            putUSBUSART(PSTR("TOGGLE OUTPUT RELAY\n"),sizeof("TOGGLE OUTPUT RELAY\n"));
-            RELAY_STATE = !RELAY_STATE;
-            
-            break;
-        case CUSTOM_COMMAND_2:
-            
-            break;
-    }
-    
 }
 
 bool MEF_DataArrive(void);
@@ -414,40 +386,20 @@ int command;
 
 void protocol_main_loop(void)
 {
+    
     if(MEF_DataArrive()){
         command = CommandDetermine(usbReadBuffer);
     }
     
-    G_CommandExecute(command);
-    M_CommandExecute(command);
-    Custom_CommandExecute(command);
-    
     CDCTxService();
-    /*
-     * 
-    uint8_t numBytesRead;
     
-    for (;;) {
-        
-        numBytesRead = getsUSBUSART(usbReadBuffer, sizeof(usbReadBuffer));
-        
-        if(numBytesRead > 0) {
-            if ((usbReadBuffer[numBytesRead-1] == '\n') || (usbReadBuffer[numBytesRead-1] == '\r')) {
-                gc_execute_command_line(usbReadBuffer);
-            }
-        }
-        
-        CDCTxService();
-        
-    }
-     * 
-    */
     return;
+
 }
 
 typedef enum{
     EST_MEF_DATA_INIT = 0,
-    EST_MEF_DATA_WAIT,
+    EST_MEF_DATA_CHECK_END,
 }estMefDataArrive_enum;
 
 uint8_t numBytesRead;
@@ -464,15 +416,17 @@ bool MEF_DataArrive(void){
             dataIn = false;
             numBytesRead = getsUSBUSART(usbReadBuffer, sizeof(usbReadBuffer));
             if(numBytesRead > 0) {
-                estMefDataArrive = EST_MEF_DATA_WAIT;
+                estMefDataArrive = EST_MEF_DATA_CHECK_END;
             }
             break;
             
-        case EST_MEF_DATA_WAIT:
+        case EST_MEF_DATA_CHECK_END:
             
             if ((usbReadBuffer[numBytesRead-1] == '\n') || (usbReadBuffer[numBytesRead-1] == '\r')) {
                 estMefDataArrive = EST_MEF_DATA_INIT;
                 dataIn = true;
+            }else{
+                estMefDataArrive = EST_MEF_DATA_INIT;
             }
             break;
         

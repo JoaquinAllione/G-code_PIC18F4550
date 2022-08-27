@@ -5702,8 +5702,13 @@ extern __attribute__((nonreentrant)) void _delay3(unsigned char);
 # 1 "./timer0.h" 1
 # 24 "./timer0.h"
 void Timer0_Init(void);
+void TIMER0_Set_TMR0L_Reg(unsigned char value);
 # 10 "timer0.c" 2
 
+
+void TIMER0_Set_TMR0L_Reg(unsigned char value){
+    TMR0L = value;
+}
 
 void Timer0_Init(void){
 
@@ -5719,9 +5724,9 @@ void Timer0_Init(void){
     T0CONbits.T0CS = 0;
     T0CONbits.PSA = 0;
     T0CONbits.T0PS = 0b111;
-# 38 "timer0.c"
+# 42 "timer0.c"
     TMR0L = 208;
-# 51 "timer0.c"
+# 55 "timer0.c"
     T0CONbits.TMR0ON = 1;
     INTCONbits.GIE = 1;
 

@@ -6821,6 +6821,7 @@ __attribute__((inline)) void processUSBTasks(void);
 # 1 "./timer0.h" 1
 # 24 "./timer0.h"
 void Timer0_Init(void);
+void TIMER0_Set_TMR0L_Reg(unsigned char value);
 # 8 "main.c" 2
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.32\\pic\\include\\c99\\math.h" 1 3
 # 15 "C:\\Program Files\\Microchip\\xc8\\v2.32\\pic\\include\\c99\\math.h" 3
@@ -7477,8 +7478,29 @@ void PrintMotorDirConfig(motor *M){
         putUSBUSART(((const __attribute__((space(prog))) char *)("Direction: UNCLOCKWISE\n")),sizeof("Direction: UNCLOCKWISE\n"));
     }
 
+}
 
 
+
+
+unsigned char FR_current = 208;
+unsigned char FR_set = 208;
+
+void FeedRate_SetValue(unsigned char FR_value_set){
+    if (FR_value_set > FR_current){
+
+        for (unsigned char i = FR_current; i <= FR_value_set; i++){
+            TIMER0_Set_TMR0L_Reg(i);
+            _delay((unsigned long)((100)*(48000000/4000.0)));
+        }
+    }else{
+
+        for (unsigned char i = FR_value_set; i >= FR_current; i--){
+            TIMER0_Set_TMR0L_Reg(i);
+            _delay((unsigned long)((100)*(48000000/4000.0)));
+        }
+    }
+    FR_current = FR_value_set;
 }
 
 void main(void)
@@ -7487,6 +7509,8 @@ void main(void)
     Motors_Init();
 
     initUSBLib();
+    Timer0_Init();
+    TIMER0_Set_TMR0L_Reg(208);
 
     while(1)
     {
@@ -7499,6 +7523,8 @@ void main(void)
     return;
 }
 
+
+
 void __attribute__((picinterrupt(("")))) mainISR (void)
 {
     if (INTCONbits.T0IF == 1){
@@ -7507,11 +7533,32 @@ void __attribute__((picinterrupt(("")))) mainISR (void)
 
         motor_1.axis_commanded.limit_1 = PORTDbits.RD6;
         motor_1.axis_commanded.limit_2 = PORTBbits.RB1;
-
+        if(motor_1.state == ENABLED) LATEbits.LATE0 = !LATEbits.LATE0;
     }
     processUSBTasks();
 }
 
+void Go_home(){
+
+
+    DirectionSet(&motor_1, CLOCKWISE);
+    motor_1.count = 0;
+    MotorStateSet(&motor_1, ENABLED);
+    while(motor_1.axis_commanded.limit_1){
+
+    }
+    DirectionSet(&motor_1, UNCLOCKWISE);
+    while(!motor_1.axis_commanded.limit_1){
+
+    }
+    MotorStateSet(&motor_1, DISABLED);
+
+    motor_1.position_current = 0.0;
+    motor_1.position_set = 0.0;
+
+    putUSBUSART(((const __attribute__((space(prog))) char *)("X HOME ARRIVE!")),sizeof("X HOME ARRIVE!"));
+
+}
 
 int CommandDetermine(char* line){
 
@@ -7541,43 +7588,43 @@ int CommandDetermine(char* line){
                     case 1:
 
                         command = 1;
-                        putUSBUSART(((const __attribute__((space(prog))) char *)("G1-command arrive!\n")),sizeof("G1-command arrive!\n"));
+
 
                         break;
                     case 4:
 
                         command = 2;
-                        putUSBUSART(((const __attribute__((space(prog))) char *)("G4-command arrive!\n")),sizeof("G4-command arrive!\n"));
+
 
                         break;
                     case 21:
 
                         command = 3;
-                        putUSBUSART(((const __attribute__((space(prog))) char *)("G21-command arrive!\n")),sizeof("G21-command arrive!\n"));
+
 
                         break;
                     case 28:
 
                         command = 4;
-                        putUSBUSART(((const __attribute__((space(prog))) char *)("G28-command arrive!\n")),sizeof("G28-command arrive!\n"));
+
 
                         break;
                     case 90:
 
                         command = 5;
-                        putUSBUSART(((const __attribute__((space(prog))) char *)("G90-command arrive!\n")),sizeof("G90-command arrive!\n"));
+
 
                         break;
                     case 91:
 
                         command = 6;
-                        putUSBUSART(((const __attribute__((space(prog))) char *)("G91-command arrive!\n")),sizeof("G91-command arrive!\n"));
+
 
                         break;
                     case 92:
 
                         command = 7;
-                        putUSBUSART(((const __attribute__((space(prog))) char *)("G92-command arrive!\n")),sizeof("G92-command arrive!\n"));
+
 
                         break;
                     default:
@@ -7597,25 +7644,25 @@ int CommandDetermine(char* line){
                     case 0:
 
                         command = 9;
-                        putUSBUSART(((const __attribute__((space(prog))) char *)("M0-command arrive!\n")),sizeof("M0-command arrive!\n"));
+
 
                         break;
                     case 1:
 
                         command = 10;
-                        putUSBUSART(((const __attribute__((space(prog))) char *)("M1-command arrive!\n")),sizeof("M1-command arrive!\n"));
+
 
                         break;
                     case 2:
 
                         command = 11;
-                        putUSBUSART(((const __attribute__((space(prog))) char *)("M2-command arrive!\n")),sizeof("M2-command arrive!\n"));
+
 
                         break;
                     case 84:
 
                         command = 12;
-                        putUSBUSART(((const __attribute__((space(prog))) char *)("M84-command arrive!\n")),sizeof("M84-command arrive!\n"));
+
 
                         break;
                     default:
@@ -7660,83 +7707,9 @@ int CommandDetermine(char* line){
 
     }
 
+    if(command == 4) Go_home();
     return command;
 
-
-}
-
-void G_CommandExecute(int command){
-
-    switch(command){
-        case 0:
-
-            break;
-        case 1:
-
-            break;
-        case 2:
-
-            break;
-        case 3:
-
-            break;
-        case 4:
-
-            break;
-        case 5:
-
-            break;
-        case 6:
-
-            break;
-        case 7:
-
-            break;
-        case 8:
-
-            break;
-    }
-
-}
-
-void M_CommandExecute(int command){
-
-    switch(command){
-        case 9:
-
-            break;
-        case 10:
-
-            break;
-        case 11:
-
-            break;
-        case 12:
-
-
-            MotorStateSet(&motor_1, DISABLED);
-
-            break;
-        case 13:
-
-            break;
-    }
-
-}
-
-void Custom_CommandExecute(int command){
-
-    switch(command){
-        case 14:
-
-            putUSBUSART(((const __attribute__((space(prog))) char *)("TOGGLE OUTPUT RELAY\n")),sizeof("TOGGLE OUTPUT RELAY\n"));
-            LATCbits.LATC2 = !LATCbits.LATC2;
-
-            break;
-        case 15:
-
-            break;
-    }
 
 }
 
@@ -7745,22 +7718,20 @@ int command;
 
 void protocol_main_loop(void)
 {
+
     if(MEF_DataArrive()){
         command = CommandDetermine(usbReadBuffer);
     }
 
-    G_CommandExecute(command);
-    M_CommandExecute(command);
-    Custom_CommandExecute(command);
-
     CDCTxService();
-# 445 "main.c"
+
     return;
+
 }
 
 typedef enum{
     EST_MEF_DATA_INIT = 0,
-    EST_MEF_DATA_WAIT,
+    EST_MEF_DATA_CHECK_END,
 }estMefDataArrive_enum;
 
 uint8_t numBytesRead;
@@ -7777,15 +7748,17 @@ _Bool MEF_DataArrive(void){
             dataIn = 0;
             numBytesRead = getsUSBUSART(usbReadBuffer, sizeof(usbReadBuffer));
             if(numBytesRead > 0) {
-                estMefDataArrive = EST_MEF_DATA_WAIT;
+                estMefDataArrive = EST_MEF_DATA_CHECK_END;
             }
             break;
 
-        case EST_MEF_DATA_WAIT:
+        case EST_MEF_DATA_CHECK_END:
 
             if ((usbReadBuffer[numBytesRead-1] == '\n') || (usbReadBuffer[numBytesRead-1] == '\r')) {
                 estMefDataArrive = EST_MEF_DATA_INIT;
                 dataIn = 1;
+            }else{
+                estMefDataArrive = EST_MEF_DATA_INIT;
             }
             break;
 

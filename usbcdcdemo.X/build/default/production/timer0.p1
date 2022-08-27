@@ -1,5 +1,8 @@
 Version 4.0 HI-TECH Software Intermediate Code
-"7545 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f4550.h
+"8146 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f4550.h
+[; ;C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f4550.h: 8146: extern volatile unsigned char TMR0L __attribute__((address(0xFD6)));
+[v _TMR0L `Vuc ~T0 @X0 0 e@4054 ]
+"7545
 [; ;C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f4550.h: 7545:     struct {
 [s S322 :1 `uc 1 ]
 [n S322 . NOT_BOR ]
@@ -72,9 +75,6 @@ Version 4.0 HI-TECH Software Intermediate Code
 "8089
 [; ;C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f4550.h: 8089: extern volatile T0CONbits_t T0CONbits __attribute__((address(0xFD5)));
 [v _T0CONbits `VS346 ~T0 @X0 0 e@4053 ]
-"8146
-[; ;C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f4550.h: 8146: extern volatile unsigned char TMR0L __attribute__((address(0xFD6)));
-[v _TMR0L `Vuc ~T0 @X0 0 e@4054 ]
 "54 C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f4550.h
 [; ;C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f4550.h: 54: __asm("SPPDATA equ 0F62h");
 [; <" SPPDATA equ 0F62h ;# ">
@@ -662,51 +662,65 @@ Version 4.0 HI-TECH Software Intermediate Code
 "64
 [p x EBTRB  =  OFF       ]
 "12 timer0.c
-[; ;timer0.c: 12: void Timer0_Init(void){
+[; ;timer0.c: 12: void TIMER0_Set_TMR0L_Reg(unsigned char value){
+[v _TIMER0_Set_TMR0L_Reg `(v ~T0 @X0 1 ef1`uc ]
+{
+[e :U _TIMER0_Set_TMR0L_Reg ]
+[v _value `uc ~T0 @X0 1 r1 ]
+[f ]
+"13
+[; ;timer0.c: 13:     TMR0L = value;
+[e = _TMR0L _value ]
+"14
+[; ;timer0.c: 14: }
+[e :UE 367 ]
+}
+"16
+[; ;timer0.c: 16: void Timer0_Init(void){
 [v _Timer0_Init `(v ~T0 @X0 1 ef ]
 {
 [e :U _Timer0_Init ]
 [f ]
-"14
-[; ;timer0.c: 14:     RCONbits.IPEN = 0;
-[e = . . _RCONbits 5 7 -> -> 0 `i `uc ]
-"16
-[; ;timer0.c: 16:     INTCONbits.GIE = 0;
-[e = . . _INTCONbits 1 7 -> -> 0 `i `uc ]
-"17
-[; ;timer0.c: 17:     INTCONbits.PEIE = 1;
-[e = . . _INTCONbits 1 6 -> -> 1 `i `uc ]
 "18
-[; ;timer0.c: 18:     INTCONbits.TMR0IE = 1;
-[e = . . _INTCONbits 0 5 -> -> 1 `i `uc ]
-"19
-[; ;timer0.c: 19:     INTCONbits.TMR0IF = 0;
-[e = . . _INTCONbits 0 2 -> -> 0 `i `uc ]
+[; ;timer0.c: 18:     RCONbits.IPEN = 0;
+[e = . . _RCONbits 5 7 -> -> 0 `i `uc ]
+"20
+[; ;timer0.c: 20:     INTCONbits.GIE = 0;
+[e = . . _INTCONbits 1 7 -> -> 0 `i `uc ]
 "21
-[; ;timer0.c: 21:     T0CONbits.TMR0ON = 0;
-[e = . . _T0CONbits 0 5 -> -> 0 `i `uc ]
+[; ;timer0.c: 21:     INTCONbits.PEIE = 1;
+[e = . . _INTCONbits 1 6 -> -> 1 `i `uc ]
 "22
-[; ;timer0.c: 22:     T0CONbits.T08BIT = 1;
-[e = . . _T0CONbits 0 4 -> -> 1 `i `uc ]
+[; ;timer0.c: 22:     INTCONbits.TMR0IE = 1;
+[e = . . _INTCONbits 0 5 -> -> 1 `i `uc ]
 "23
-[; ;timer0.c: 23:     T0CONbits.T0CS = 0;
-[e = . . _T0CONbits 0 3 -> -> 0 `i `uc ]
-"24
-[; ;timer0.c: 24:     T0CONbits.PSA = 0;
-[e = . . _T0CONbits 0 1 -> -> 0 `i `uc ]
+[; ;timer0.c: 23:     INTCONbits.TMR0IF = 0;
+[e = . . _INTCONbits 0 2 -> -> 0 `i `uc ]
 "25
-[; ;timer0.c: 25:     T0CONbits.T0PS = 0b111;
+[; ;timer0.c: 25:     T0CONbits.TMR0ON = 0;
+[e = . . _T0CONbits 0 5 -> -> 0 `i `uc ]
+"26
+[; ;timer0.c: 26:     T0CONbits.T08BIT = 1;
+[e = . . _T0CONbits 0 4 -> -> 1 `i `uc ]
+"27
+[; ;timer0.c: 27:     T0CONbits.T0CS = 0;
+[e = . . _T0CONbits 0 3 -> -> 0 `i `uc ]
+"28
+[; ;timer0.c: 28:     T0CONbits.PSA = 0;
+[e = . . _T0CONbits 0 1 -> -> 0 `i `uc ]
+"29
+[; ;timer0.c: 29:     T0CONbits.T0PS = 0b111;
 [e = . . _T0CONbits 0 0 -> -> 7 `i `uc ]
-"38
-[; ;timer0.c: 38:     TMR0L = 208;
+"42
+[; ;timer0.c: 42:     TMR0L = 208;
 [e = _TMR0L -> -> 208 `i `uc ]
-"51
-[; ;timer0.c: 51:     T0CONbits.TMR0ON = 1;
+"55
+[; ;timer0.c: 55:     T0CONbits.TMR0ON = 1;
 [e = . . _T0CONbits 0 5 -> -> 1 `i `uc ]
-"52
-[; ;timer0.c: 52:     INTCONbits.GIE = 1;
+"56
+[; ;timer0.c: 56:     INTCONbits.GIE = 1;
 [e = . . _INTCONbits 1 7 -> -> 1 `i `uc ]
-"54
-[; ;timer0.c: 54: }
-[e :UE 367 ]
+"58
+[; ;timer0.c: 58: }
+[e :UE 368 ]
 }
