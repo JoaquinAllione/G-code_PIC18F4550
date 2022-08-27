@@ -7534,7 +7534,11 @@ void __attribute__((picinterrupt(("")))) mainISR (void)
         motor_1.axis_commanded.limit_1 = PORTDbits.RD6;
         motor_1.axis_commanded.limit_2 = PORTBbits.RB1;
 
-        if(motor_1.state == ENABLED) LATEbits.LATE0 = !LATEbits.LATE0;
+        if(motor_1.state == ENABLED){
+            LATEbits.LATE0 = !LATEbits.LATE0;
+            if(motor_1.count > 0) motor_1.count--;
+        }
+
     }
     processUSBTasks();
 }
@@ -7562,7 +7566,7 @@ int CommandDetermine(char* line){
                     case 0:
 
                         command = 0;
-                        putUSBUSART(((const __attribute__((space(prog))) char *)("G0-command arrive!\n")),sizeof("G0-command arrive!\n"));
+
 
                         break;
                     case 1:
@@ -7687,7 +7691,6 @@ int CommandDetermine(char* line){
         token = strtok(((void*)0), " ");
 
     }
-
 
     return command;
 
@@ -7829,10 +7832,76 @@ _Bool MEF_GoHome(void){
 }
 
 typedef enum{
+    EST_MEF_POSITIONAMENT_INIT = 0,
+    EST_MEF_POSITIONAMENT_MOVING,
+}estMefPositionament_enum;
+
+_Bool arrive = 0;
+
+_Bool MEF_Positionament(void){
+
+    static estMefPositionament_enum estMefPositionament = EST_MEF_POSITIONAMENT_INIT;
+
+    switch(estMefPositionament){
+
+        case EST_MEF_POSITIONAMENT_INIT:
+
+            arrive = 0;
+            if(motor_1.position_current == motor_1.position_set){
+                arrive = 1;
+            }
+
+            if(motor_1.position_set < motor_1.position_current){
+                MotorStateSet(&motor_1, DISABLED);
+                _delay((unsigned long)((1)*(48000000/4000000.0)));
+                DirectionSet(&motor_1, CLOCKWISE);
+                _delay((unsigned long)((1)*(48000000/4000000.0)));
+                motor_1.count = (motor_1.position_current - motor_1.position_set)*motor_1.steps_per_mm;
+                MotorStateSet(&motor_1, ENABLED);
+                estMefPositionament = EST_MEF_POSITIONAMENT_MOVING;
+            }
+
+            if(motor_1.position_set > motor_1.position_current){
+                MotorStateSet(&motor_1, DISABLED);
+                _delay((unsigned long)((1)*(48000000/4000000.0)));
+                DirectionSet(&motor_1, UNCLOCKWISE);
+                _delay((unsigned long)((1)*(48000000/4000000.0)));
+                motor_1.count = (motor_1.position_set - motor_1.position_current)*motor_1.steps_per_mm;
+                MotorStateSet(&motor_1, ENABLED);
+                estMefPositionament = EST_MEF_POSITIONAMENT_MOVING;
+            }
+
+            break;
+
+        case EST_MEF_POSITIONAMENT_MOVING:
+
+            if (motor_1.count <= 0){
+                arrive = 1;
+                MotorStateSet(&motor_1, DISABLED);
+                motor_1.position_current = motor_1.position_set;
+                LATCbits.LATC2 = !LATCbits.LATC2;
+                estMefPositionament = EST_MEF_POSITIONAMENT_INIT;
+            }
+
+            break;
+
+        default:
+            estMefPositionament = EST_MEF_POSITIONAMENT_INIT;
+            arrive = 0;
+            break;
+
+    }
+    return arrive;
+}
+
+typedef enum{
     EST_MEF_PRINCIPAL_WAIT_FRAME = 0,
     EST_MEF_PRINCIPAL_READ_FRAME,
     EST_MEF_PRINCIPAL_G28_EXECUTE,
+    EST_MEF_PRINCIPAL_G0_EXECUTE,
 }estMefPrincipal_enum;
+
+int com;
 
 void MEF_Principal(void){
 
@@ -7843,7 +7912,6 @@ void MEF_Principal(void){
         case EST_MEF_PRINCIPAL_WAIT_FRAME:
 
             if(MEF_DataArrive()){
-                LATCbits.LATC2 = !LATCbits.LATC2;
                 estMefPrincipal = EST_MEF_PRINCIPAL_READ_FRAME;
             }
 
@@ -7851,8 +7919,12 @@ void MEF_Principal(void){
 
         case EST_MEF_PRINCIPAL_READ_FRAME:
 
-            if(4 == CommandDetermine(usbReadBuffer)){
+            com = CommandDetermine(usbReadBuffer);
+
+            if(4 == com){
                 estMefPrincipal = EST_MEF_PRINCIPAL_G28_EXECUTE;
+            }else if(0 == com){
+                estMefPrincipal = EST_MEF_PRINCIPAL_G0_EXECUTE;
             }else{
                 estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
             }
@@ -7864,6 +7936,15 @@ void MEF_Principal(void){
             if(MEF_GoHome()){
                 estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
                 putUSBUSART(((const __attribute__((space(prog))) char *)("HOME ARRIVE!\n")),sizeof("HOME ARRIVE!\n"));
+            }
+
+            break;
+
+        case EST_MEF_PRINCIPAL_G0_EXECUTE:
+
+            if(MEF_Positionament()){
+                estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
+                putUSBUSART(((const __attribute__((space(prog))) char *)("POSITION ARRIVE!\n")),sizeof("POSITION ARRIVE!\n"));
             }
 
             break;

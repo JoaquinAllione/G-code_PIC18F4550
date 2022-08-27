@@ -177,27 +177,31 @@ Version 4.0 HI-TECH Software Intermediate Code
 "28 C:\Program Files\Microchip\xc8\v2.32\pic\include\c99\stdlib.h
 [; ;C:\Program Files\Microchip\xc8\v2.32\pic\include\c99\stdlib.h: 28: float strtof (const char *restrict, char **restrict);
 [v _strtof `(f ~T0 @X0 0 ef2`*Cuc`**uc ]
-"365 main.c
-[; ;main.c: 365: void MEF_Principal(void);
+"368 main.c
+[; ;main.c: 368: void MEF_Principal(void);
 [v _MEF_Principal `(v ~T0 @X0 0 ef ]
 "831 ./usb_device_cdc.h
 [; ;./usb_device_cdc.h: 831: void CDCTxService(void);
 [v _CDCTxService `(v ~T0 @X0 0 ef ]
-"388 main.c
-[; ;main.c: 388:     static estMefDataArrive_enum estMefDataArrive = EST_MEF_DATA_INIT;
+"391 main.c
+[; ;main.c: 391:     static estMefDataArrive_enum estMefDataArrive = EST_MEF_DATA_INIT;
 [c E4769 0 1 2 .. ]
 [n E4769 . EST_MEF_DATA_INIT EST_MEF_DATA_WAIT EST_MEF_DATA_CHECK_END  ]
 "653 ./usb_device_cdc.h
 [; ;./usb_device_cdc.h: 653: uint8_t getsUSBUSART(uint8_t *buffer, uint8_t len);
 [v _getsUSBUSART `(uc ~T0 @X0 0 ef2`*uc`uc ]
-"436 main.c
-[; ;main.c: 436:     static estMefGoHome_enum estMefGoHome = EST_MEF_GO_HOME_INIT;
+"439 main.c
+[; ;main.c: 439:     static estMefGoHome_enum estMefGoHome = EST_MEF_GO_HOME_INIT;
 [c E4778 0 1 2 .. ]
 [n E4778 . EST_MEF_GO_HOME_INIT EST_MEF_GO_HOME_MOVING EST_MEF_GO_HOME_REVERSE  ]
-"507
-[; ;main.c: 507:     static estMefPrincipal_enum estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
-[c E4786 0 1 2 .. ]
-[n E4786 . EST_MEF_PRINCIPAL_WAIT_FRAME EST_MEF_PRINCIPAL_READ_FRAME EST_MEF_PRINCIPAL_G28_EXECUTE  ]
+"511
+[; ;main.c: 511:     static estMefPositionament_enum estMefPositionament = EST_MEF_POSITIONAMENT_INIT;
+[c E4786 0 1 .. ]
+[n E4786 . EST_MEF_POSITIONAMENT_INIT EST_MEF_POSITIONAMENT_MOVING  ]
+"576
+[; ;main.c: 576:     static estMefPrincipal_enum estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
+[c E4793 0 1 2 3 .. ]
+[n E4793 . EST_MEF_PRINCIPAL_WAIT_FRAME EST_MEF_PRINCIPAL_READ_FRAME EST_MEF_PRINCIPAL_G28_EXECUTE EST_MEF_PRINCIPAL_G0_EXECUTE  ]
 "5 ./sysconfig.h
 [p x PLLDIV  =  4            ]
 "6
@@ -1234,743 +1238,944 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;main.c: 203:         motor_1.axis_commanded.limit_2 = PORTBbits.RB1;
 [e = . . _motor_1 5 2 -> . . _PORTBbits 0 1 `a ]
 "205
-[; ;main.c: 205:         if(motor_1.state == ENABLED) LATEbits.LATE0 = !LATEbits.LATE0;
+[; ;main.c: 205:         if(motor_1.state == ENABLED){
 [e $ ! == -> . _motor_1 1 `ui -> . `E4719 0 `ui 480  ]
-[e = . . _LATEbits 0 0 -> -> ! != -> . . _LATEbits 0 0 `i -> 0 `i `i `uc ]
-[e :U 480 ]
+{
 "206
-[; ;main.c: 206:     }
+[; ;main.c: 206:             LATEbits.LATE0 = !LATEbits.LATE0;
+[e = . . _LATEbits 0 0 -> -> ! != -> . . _LATEbits 0 0 `i -> 0 `i `i `uc ]
+"207
+[; ;main.c: 207:             if(motor_1.count > 0) motor_1.count--;
+[e $ ! > . _motor_1 0 -> 0 `i 481  ]
+[e -- . _motor_1 0 -> 1 `i ]
+[e :U 481 ]
+"208
+[; ;main.c: 208:         }
+}
+[e :U 480 ]
+"210
+[; ;main.c: 210:     }
 }
 [e :U 479 ]
-"207
-[; ;main.c: 207:     processUSBTasks();
+"211
+[; ;main.c: 211:     processUSBTasks();
 [e ( _processUSBTasks ..  ]
-"208
-[; ;main.c: 208: }
+"212
+[; ;main.c: 212: }
 [e :UE 478 ]
 }
-"210
-[; ;main.c: 210: int CommandDetermine(char* line){
+"214
+[; ;main.c: 214: int CommandDetermine(char* line){
 [v _CommandDetermine `(i ~T0 @X0 1 ef1`*uc ]
 {
 [e :U _CommandDetermine ]
 [v _line `*uc ~T0 @X0 1 r1 ]
 [f ]
-"212
-[; ;main.c: 212:     char* token = strtok(line, " ");
+"216
+[; ;main.c: 216:     char* token = strtok(line, " ");
 [v _token `*uc ~T0 @X0 1 a ]
 [e = _token ( _strtok (2 , _line :s 3C ]
-"213
-[; ;main.c: 213:     char* endPtr;
-[v _endPtr `*uc ~T0 @X0 1 a ]
-"214
-[; ;main.c: 214:     char letter;
-[v _letter `uc ~T0 @X0 1 a ]
-"215
-[; ;main.c: 215:     int interger;
-[v _interger `i ~T0 @X0 1 a ]
-"216
-[; ;main.c: 216:     float x_pos;
-[v _x_pos `f ~T0 @X0 1 a ]
 "217
-[; ;main.c: 217:     _Bool invalid_command = 0;
+[; ;main.c: 217:     char* endPtr;
+[v _endPtr `*uc ~T0 @X0 1 a ]
+"218
+[; ;main.c: 218:     char letter;
+[v _letter `uc ~T0 @X0 1 a ]
+"219
+[; ;main.c: 219:     int interger;
+[v _interger `i ~T0 @X0 1 a ]
+"220
+[; ;main.c: 220:     float x_pos;
+[v _x_pos `f ~T0 @X0 1 a ]
+"221
+[; ;main.c: 221:     _Bool invalid_command = 0;
 [v _invalid_command `a ~T0 @X0 1 a ]
 [e = _invalid_command -> -> 0 `i `a ]
-"218
-[; ;main.c: 218:     int command = -1;
+"222
+[; ;main.c: 222:     int command = -1;
 [v _command `i ~T0 @X0 1 a ]
 [e = _command -U -> 1 `i ]
-"219
-[; ;main.c: 219:     while((token != ((void*)0))&&(!invalid_command)) {
-[e $U 482  ]
-[e :U 483 ]
+"223
+[; ;main.c: 223:     while((token != ((void*)0))&&(!invalid_command)) {
+[e $U 483  ]
+[e :U 484 ]
 {
-"221
-[; ;main.c: 221:         letter = token[0];
+"225
+[; ;main.c: 225:         letter = token[0];
 [e = _letter *U + _token * -> -> 0 `i `x -> -> # *U _token `i `x ]
-"222
-[; ;main.c: 222:         token[0] = '0';
-[e = *U + _token * -> -> 0 `i `x -> -> # *U _token `i `x -> -> 48 `ui `uc ]
-"224
-[; ;main.c: 224:         switch(letter){
-[e $U 486  ]
-{
 "226
-[; ;main.c: 226:             case 'G':
-[e :U 487 ]
+[; ;main.c: 226:         token[0] = '0';
+[e = *U + _token * -> -> 0 `i `x -> -> # *U _token `i `x -> -> 48 `ui `uc ]
 "228
-[; ;main.c: 228:                 interger = truncf(strtof(token, &endPtr));
-[e = _interger -> ( _truncf (1 ( _strtof (2 , -> _token `*Cuc &U _endPtr `i ]
-"229
-[; ;main.c: 229:                 switch(interger) {
-[e $U 489  ]
+[; ;main.c: 228:         switch(letter){
+[e $U 487  ]
 {
 "230
-[; ;main.c: 230:                     case 0:
-[e :U 490 ]
-"232
-[; ;main.c: 232:                         command = 0;
-[e = _command -> 0 `i ]
-"233
-[; ;main.c: 233:                         putUSBUSART(((const __attribute__((space(prog))) char *)("G0-command arrive!\n")),sizeof("G0-command arrive!\n"));
-[e ( _putUSBUSART (2 , -> -> :s 4C `*Cuc `*uc -> -> 20 `ui `uc ]
-"235
-[; ;main.c: 235:                         break;
-[e $U 488  ]
-"236
-[; ;main.c: 236:                     case 1:
-[e :U 491 ]
-"238
-[; ;main.c: 238:                         command = 1;
-[e = _command -> 1 `i ]
-"241
-[; ;main.c: 241:                         break;
-[e $U 488  ]
-"242
-[; ;main.c: 242:                     case 4:
-[e :U 492 ]
-"244
-[; ;main.c: 244:                         command = 2;
-[e = _command -> 2 `i ]
-"247
-[; ;main.c: 247:                         break;
-[e $U 488  ]
-"248
-[; ;main.c: 248:                     case 21:
-[e :U 493 ]
-"250
-[; ;main.c: 250:                         command = 3;
-[e = _command -> 3 `i ]
-"253
-[; ;main.c: 253:                         break;
-[e $U 488  ]
-"254
-[; ;main.c: 254:                     case 28:
-[e :U 494 ]
-"256
-[; ;main.c: 256:                         command = 4;
-[e = _command -> 4 `i ]
-"257
-[; ;main.c: 257:                         putUSBUSART(((const __attribute__((space(prog))) char *)("G28-command arrive!\n")),sizeof("G28-command arrive!\n"));
-[e ( _putUSBUSART (2 , -> -> :s 5C `*Cuc `*uc -> -> 21 `ui `uc ]
-"259
-[; ;main.c: 259:                         break;
-[e $U 488  ]
-"260
-[; ;main.c: 260:                     case 90:
-[e :U 495 ]
-"262
-[; ;main.c: 262:                         command = 5;
-[e = _command -> 5 `i ]
-"265
-[; ;main.c: 265:                         break;
-[e $U 488  ]
-"266
-[; ;main.c: 266:                     case 91:
-[e :U 496 ]
-"268
-[; ;main.c: 268:                         command = 6;
-[e = _command -> 6 `i ]
-"271
-[; ;main.c: 271:                         break;
-[e $U 488  ]
-"272
-[; ;main.c: 272:                     case 92:
-[e :U 497 ]
-"274
-[; ;main.c: 274:                         command = 7;
-[e = _command -> 7 `i ]
-"277
-[; ;main.c: 277:                         break;
-[e $U 488  ]
-"278
-[; ;main.c: 278:                     default:
-[e :U 498 ]
-"279
-[; ;main.c: 279:                         putUSBUSART(((const __attribute__((space(prog))) char *)("Unsupported Command.\n")),sizeof("Unsupported Command.\n"));
-[e ( _putUSBUSART (2 , -> -> :s 6C `*Cuc `*uc -> -> 22 `ui `uc ]
-"280
-[; ;main.c: 280:                         invalid_command = 1;
-[e = _invalid_command -> -> 1 `i `a ]
-"281
-[; ;main.c: 281:                         command = -1;
-[e = _command -U -> 1 `i ]
-"282
-[; ;main.c: 282:                         break;
-[e $U 488  ]
-"284
-[; ;main.c: 284:                 }
-}
-[e $U 488  ]
-[e :U 489 ]
-[e [\ _interger , $ -> 0 `i 490
- , $ -> 1 `i 491
- , $ -> 4 `i 492
- , $ -> 21 `i 493
- , $ -> 28 `i 494
- , $ -> 90 `i 495
- , $ -> 91 `i 496
- , $ -> 92 `i 497
- 498 ]
+[; ;main.c: 230:             case 'G':
 [e :U 488 ]
-"286
-[; ;main.c: 286:                 break;
-[e $U 485  ]
-"288
-[; ;main.c: 288:             case 'M':
-[e :U 499 ]
-"290
-[; ;main.c: 290:                 interger = truncf(strtof(token, &endPtr));
+"232
+[; ;main.c: 232:                 interger = truncf(strtof(token, &endPtr));
 [e = _interger -> ( _truncf (1 ( _strtof (2 , -> _token `*Cuc &U _endPtr `i ]
-"291
-[; ;main.c: 291:                 switch(interger) {
-[e $U 501  ]
+"233
+[; ;main.c: 233:                 switch(interger) {
+[e $U 490  ]
 {
-"292
-[; ;main.c: 292:                     case 0:
-[e :U 502 ]
-"294
-[; ;main.c: 294:                         command = 9;
-[e = _command -> 9 `i ]
-"297
-[; ;main.c: 297:                         break;
-[e $U 500  ]
-"298
-[; ;main.c: 298:                     case 1:
-[e :U 503 ]
-"300
-[; ;main.c: 300:                         command = 10;
-[e = _command -> 10 `i ]
-"303
-[; ;main.c: 303:                         break;
-[e $U 500  ]
-"304
-[; ;main.c: 304:                     case 2:
-[e :U 504 ]
-"306
-[; ;main.c: 306:                         command = 11;
-[e = _command -> 11 `i ]
-"309
-[; ;main.c: 309:                         break;
-[e $U 500  ]
-"310
-[; ;main.c: 310:                     case 84:
-[e :U 505 ]
-"312
-[; ;main.c: 312:                         command = 12;
-[e = _command -> 12 `i ]
-"315
-[; ;main.c: 315:                         break;
-[e $U 500  ]
-"316
-[; ;main.c: 316:                     default:
-[e :U 506 ]
-"317
-[; ;main.c: 317:                         putUSBUSART(((const __attribute__((space(prog))) char *)("Unsupported Command.\n")),sizeof("Unsupported Command.\n"));
-[e ( _putUSBUSART (2 , -> -> :s 7C `*Cuc `*uc -> -> 22 `ui `uc ]
-"318
-[; ;main.c: 318:                         invalid_command = 1;
+"234
+[; ;main.c: 234:                     case 0:
+[e :U 491 ]
+"236
+[; ;main.c: 236:                         command = 0;
+[e = _command -> 0 `i ]
+"239
+[; ;main.c: 239:                         break;
+[e $U 489  ]
+"240
+[; ;main.c: 240:                     case 1:
+[e :U 492 ]
+"242
+[; ;main.c: 242:                         command = 1;
+[e = _command -> 1 `i ]
+"245
+[; ;main.c: 245:                         break;
+[e $U 489  ]
+"246
+[; ;main.c: 246:                     case 4:
+[e :U 493 ]
+"248
+[; ;main.c: 248:                         command = 2;
+[e = _command -> 2 `i ]
+"251
+[; ;main.c: 251:                         break;
+[e $U 489  ]
+"252
+[; ;main.c: 252:                     case 21:
+[e :U 494 ]
+"254
+[; ;main.c: 254:                         command = 3;
+[e = _command -> 3 `i ]
+"257
+[; ;main.c: 257:                         break;
+[e $U 489  ]
+"258
+[; ;main.c: 258:                     case 28:
+[e :U 495 ]
+"260
+[; ;main.c: 260:                         command = 4;
+[e = _command -> 4 `i ]
+"261
+[; ;main.c: 261:                         putUSBUSART(((const __attribute__((space(prog))) char *)("G28-command arrive!\n")),sizeof("G28-command arrive!\n"));
+[e ( _putUSBUSART (2 , -> -> :s 4C `*Cuc `*uc -> -> 21 `ui `uc ]
+"263
+[; ;main.c: 263:                         break;
+[e $U 489  ]
+"264
+[; ;main.c: 264:                     case 90:
+[e :U 496 ]
+"266
+[; ;main.c: 266:                         command = 5;
+[e = _command -> 5 `i ]
+"269
+[; ;main.c: 269:                         break;
+[e $U 489  ]
+"270
+[; ;main.c: 270:                     case 91:
+[e :U 497 ]
+"272
+[; ;main.c: 272:                         command = 6;
+[e = _command -> 6 `i ]
+"275
+[; ;main.c: 275:                         break;
+[e $U 489  ]
+"276
+[; ;main.c: 276:                     case 92:
+[e :U 498 ]
+"278
+[; ;main.c: 278:                         command = 7;
+[e = _command -> 7 `i ]
+"281
+[; ;main.c: 281:                         break;
+[e $U 489  ]
+"282
+[; ;main.c: 282:                     default:
+[e :U 499 ]
+"283
+[; ;main.c: 283:                         putUSBUSART(((const __attribute__((space(prog))) char *)("Unsupported Command.\n")),sizeof("Unsupported Command.\n"));
+[e ( _putUSBUSART (2 , -> -> :s 5C `*Cuc `*uc -> -> 22 `ui `uc ]
+"284
+[; ;main.c: 284:                         invalid_command = 1;
 [e = _invalid_command -> -> 1 `i `a ]
-"319
-[; ;main.c: 319:                         command = -1;
+"285
+[; ;main.c: 285:                         command = -1;
 [e = _command -U -> 1 `i ]
-"320
-[; ;main.c: 320:                         break;
-[e $U 500  ]
-"321
-[; ;main.c: 321:                 }
+"286
+[; ;main.c: 286:                         break;
+[e $U 489  ]
+"288
+[; ;main.c: 288:                 }
 }
-[e $U 500  ]
-[e :U 501 ]
-[e [\ _interger , $ -> 0 `i 502
- , $ -> 1 `i 503
- , $ -> 2 `i 504
- , $ -> 84 `i 505
- 506 ]
+[e $U 489  ]
+[e :U 490 ]
+[e [\ _interger , $ -> 0 `i 491
+ , $ -> 1 `i 492
+ , $ -> 4 `i 493
+ , $ -> 21 `i 494
+ , $ -> 28 `i 495
+ , $ -> 90 `i 496
+ , $ -> 91 `i 497
+ , $ -> 92 `i 498
+ 499 ]
+[e :U 489 ]
+"290
+[; ;main.c: 290:                 break;
+[e $U 486  ]
+"292
+[; ;main.c: 292:             case 'M':
 [e :U 500 ]
-"323
-[; ;main.c: 323:                 break;
-[e $U 485  ]
-"325
-[; ;main.c: 325:             case 'X':
+"294
+[; ;main.c: 294:                 interger = truncf(strtof(token, &endPtr));
+[e = _interger -> ( _truncf (1 ( _strtof (2 , -> _token `*Cuc &U _endPtr `i ]
+"295
+[; ;main.c: 295:                 switch(interger) {
+[e $U 502  ]
+{
+"296
+[; ;main.c: 296:                     case 0:
+[e :U 503 ]
+"298
+[; ;main.c: 298:                         command = 9;
+[e = _command -> 9 `i ]
+"301
+[; ;main.c: 301:                         break;
+[e $U 501  ]
+"302
+[; ;main.c: 302:                     case 1:
+[e :U 504 ]
+"304
+[; ;main.c: 304:                         command = 10;
+[e = _command -> 10 `i ]
+"307
+[; ;main.c: 307:                         break;
+[e $U 501  ]
+"308
+[; ;main.c: 308:                     case 2:
+[e :U 505 ]
+"310
+[; ;main.c: 310:                         command = 11;
+[e = _command -> 11 `i ]
+"313
+[; ;main.c: 313:                         break;
+[e $U 501  ]
+"314
+[; ;main.c: 314:                     case 84:
+[e :U 506 ]
+"316
+[; ;main.c: 316:                         command = 12;
+[e = _command -> 12 `i ]
+"319
+[; ;main.c: 319:                         break;
+[e $U 501  ]
+"320
+[; ;main.c: 320:                     default:
 [e :U 507 ]
+"321
+[; ;main.c: 321:                         putUSBUSART(((const __attribute__((space(prog))) char *)("Unsupported Command.\n")),sizeof("Unsupported Command.\n"));
+[e ( _putUSBUSART (2 , -> -> :s 6C `*Cuc `*uc -> -> 22 `ui `uc ]
+"322
+[; ;main.c: 322:                         invalid_command = 1;
+[e = _invalid_command -> -> 1 `i `a ]
+"323
+[; ;main.c: 323:                         command = -1;
+[e = _command -U -> 1 `i ]
+"324
+[; ;main.c: 324:                         break;
+[e $U 501  ]
+"325
+[; ;main.c: 325:                 }
+}
+[e $U 501  ]
+[e :U 502 ]
+[e [\ _interger , $ -> 0 `i 503
+ , $ -> 1 `i 504
+ , $ -> 2 `i 505
+ , $ -> 84 `i 506
+ 507 ]
+[e :U 501 ]
 "327
-[; ;main.c: 327:                 x_pos = strtof(token, &endPtr);
-[e = _x_pos ( _strtof (2 , -> _token `*Cuc &U _endPtr ]
-"328
-[; ;main.c: 328:                 motor_1.position_set = x_pos;
-[e = . _motor_1 4 _x_pos ]
-"330
-[; ;main.c: 330:                 break;
-[e $U 485  ]
-"332
-[; ;main.c: 332:             case 'Y':
+[; ;main.c: 327:                 break;
+[e $U 486  ]
+"329
+[; ;main.c: 329:             case 'X':
 [e :U 508 ]
+"331
+[; ;main.c: 331:                 x_pos = strtof(token, &endPtr);
+[e = _x_pos ( _strtof (2 , -> _token `*Cuc &U _endPtr ]
+"332
+[; ;main.c: 332:                 motor_1.position_set = x_pos;
+[e = . _motor_1 4 _x_pos ]
 "334
-[; ;main.c: 334:                 command = 14;
-[e = _command -> 14 `i ]
+[; ;main.c: 334:                 break;
+[e $U 486  ]
 "336
-[; ;main.c: 336:                 break;
-[e $U 485  ]
-"338
-[; ;main.c: 338:             case 'Z':
+[; ;main.c: 336:             case 'Y':
 [e :U 509 ]
+"338
+[; ;main.c: 338:                 command = 14;
+[e = _command -> 14 `i ]
 "340
-[; ;main.c: 340:                 PrintMotorDirConfig(&motor_1);
-[e ( _PrintMotorDirConfig (1 &U _motor_1 ]
+[; ;main.c: 340:                 break;
+[e $U 486  ]
 "342
-[; ;main.c: 342:                 break;
-[e $U 485  ]
-"344
-[; ;main.c: 344:             case 'F':
+[; ;main.c: 342:             case 'Z':
 [e :U 510 ]
+"344
+[; ;main.c: 344:                 PrintMotorDirConfig(&motor_1);
+[e ( _PrintMotorDirConfig (1 &U _motor_1 ]
 "346
 [; ;main.c: 346:                 break;
-[e $U 485  ]
+[e $U 486  ]
 "348
-[; ;main.c: 348:             default:
+[; ;main.c: 348:             case 'F':
 [e :U 511 ]
-"349
-[; ;main.c: 349:                 invalid_command = 1;
-[e = _invalid_command -> -> 1 `i `a ]
 "350
-[; ;main.c: 350:                 putUSBUSART(((const __attribute__((space(prog))) char *)("Unsupported Command.\n")),sizeof("Unsupported Command.\n"));
-[e ( _putUSBUSART (2 , -> -> :s 8C `*Cuc `*uc -> -> 22 `ui `uc ]
-"351
-[; ;main.c: 351:                 command = -1;
-[e = _command -U -> 1 `i ]
+[; ;main.c: 350:                 break;
+[e $U 486  ]
 "352
-[; ;main.c: 352:                 break;
-[e $U 485  ]
+[; ;main.c: 352:             default:
+[e :U 512 ]
 "353
-[; ;main.c: 353:         }
-}
-[e $U 485  ]
-[e :U 486 ]
-[e [\ -> _letter `i , $ -> -> 71 `ui `i 487
- , $ -> -> 77 `ui `i 499
- , $ -> -> 88 `ui `i 507
- , $ -> -> 89 `ui `i 508
- , $ -> -> 90 `ui `i 509
- , $ -> -> 70 `ui `i 510
- 511 ]
-[e :U 485 ]
+[; ;main.c: 353:                 invalid_command = 1;
+[e = _invalid_command -> -> 1 `i `a ]
+"354
+[; ;main.c: 354:                 putUSBUSART(((const __attribute__((space(prog))) char *)("Unsupported Command.\n")),sizeof("Unsupported Command.\n"));
+[e ( _putUSBUSART (2 , -> -> :s 7C `*Cuc `*uc -> -> 22 `ui `uc ]
 "355
-[; ;main.c: 355:         token = strtok(((void*)0), " ");
-[e = _token ( _strtok (2 , -> -> -> 0 `i `*v `*uc :s 9C ]
+[; ;main.c: 355:                 command = -1;
+[e = _command -U -> 1 `i ]
+"356
+[; ;main.c: 356:                 break;
+[e $U 486  ]
 "357
-[; ;main.c: 357:     }
+[; ;main.c: 357:         }
 }
-[e :U 482 ]
-"219
-[; ;main.c: 219:     while((token != ((void*)0))&&(!invalid_command)) {
-[e $ && != _token -> -> -> 0 `i `*v `*uc ! != -> _invalid_command `i -> 0 `i 483  ]
-[e :U 484 ]
-"360
-[; ;main.c: 360:     return command;
-[e ) _command ]
-[e $UE 481  ]
+[e $U 486  ]
+[e :U 487 ]
+[e [\ -> _letter `i , $ -> -> 71 `ui `i 488
+ , $ -> -> 77 `ui `i 500
+ , $ -> -> 88 `ui `i 508
+ , $ -> -> 89 `ui `i 509
+ , $ -> -> 90 `ui `i 510
+ , $ -> -> 70 `ui `i 511
+ 512 ]
+[e :U 486 ]
+"359
+[; ;main.c: 359:         token = strtok(((void*)0), " ");
+[e = _token ( _strtok (2 , -> -> -> 0 `i `*v `*uc :s 8C ]
+"361
+[; ;main.c: 361:     }
+}
+[e :U 483 ]
+"223
+[; ;main.c: 223:     while((token != ((void*)0))&&(!invalid_command)) {
+[e $ && != _token -> -> -> 0 `i `*v `*uc ! != -> _invalid_command `i -> 0 `i 484  ]
+[e :U 485 ]
 "363
-[; ;main.c: 363: }
-[e :UE 481 ]
+[; ;main.c: 363:     return command;
+[e ) _command ]
+[e $UE 482  ]
+"366
+[; ;main.c: 366: }
+[e :UE 482 ]
 }
-"367
-[; ;main.c: 367: void protocol_main_loop(void)
+"370
+[; ;main.c: 370: void protocol_main_loop(void)
 [v _protocol_main_loop `(v ~T0 @X0 1 ef ]
-"368
-[; ;main.c: 368: {
+"371
+[; ;main.c: 371: {
 {
 [e :U _protocol_main_loop ]
 [f ]
-"370
-[; ;main.c: 370:     MEF_Principal();
-[e ( _MEF_Principal ..  ]
-"371
-[; ;main.c: 371:     CDCTxService();
-[e ( _CDCTxService ..  ]
 "373
-[; ;main.c: 373:     return;
-[e $UE 512  ]
-"375
-[; ;main.c: 375: }
-[e :UE 512 ]
+[; ;main.c: 373:     MEF_Principal();
+[e ( _MEF_Principal ..  ]
+"374
+[; ;main.c: 374:     CDCTxService();
+[e ( _CDCTxService ..  ]
+"376
+[; ;main.c: 376:     return;
+[e $UE 513  ]
+"378
+[; ;main.c: 378: }
+[e :UE 513 ]
 }
-"383
-[; ;main.c: 383: uint8_t numBytesRead;
+"386
+[; ;main.c: 386: uint8_t numBytesRead;
 [v _numBytesRead `uc ~T0 @X0 1 e ]
-"384
-[; ;main.c: 384: _Bool dataIn = 0;
+"387
+[; ;main.c: 387: _Bool dataIn = 0;
 [v _dataIn `a ~T0 @X0 1 e ]
 [i _dataIn
 -> -> 0 `i `a
 ]
-"386
-[; ;main.c: 386: _Bool MEF_DataArrive(void){
+"389
+[; ;main.c: 389: _Bool MEF_DataArrive(void){
 [v _MEF_DataArrive `(a ~T0 @X0 1 ef ]
 {
 [e :U _MEF_DataArrive ]
 [f ]
-"388
-[; ;main.c: 388:     static estMefDataArrive_enum estMefDataArrive = EST_MEF_DATA_INIT;
+"391
+[; ;main.c: 391:     static estMefDataArrive_enum estMefDataArrive = EST_MEF_DATA_INIT;
 [v F4777 `E4769 ~T0 @X0 1 s estMefDataArrive ]
 [i F4777
 . `E4769 0
 ]
-"390
-[; ;main.c: 390:     switch(estMefDataArrive){
-[e $U 515  ]
+"393
+[; ;main.c: 393:     switch(estMefDataArrive){
+[e $U 516  ]
 {
-"392
-[; ;main.c: 392:         case EST_MEF_DATA_INIT:
-[e :U 516 ]
-"394
-[; ;main.c: 394:             dataIn = 0;
-[e = _dataIn -> -> 0 `i `a ]
 "395
-[; ;main.c: 395:             numBytesRead = 0;
-[e = _numBytesRead -> -> 0 `i `uc ]
-"396
-[; ;main.c: 396:             estMefDataArrive = EST_MEF_DATA_WAIT;
-[e = F4777 . `E4769 1 ]
-"398
-[; ;main.c: 398:             break;
-[e $U 514  ]
-"400
-[; ;main.c: 400:         case EST_MEF_DATA_WAIT:
+[; ;main.c: 395:         case EST_MEF_DATA_INIT:
 [e :U 517 ]
-"402
-[; ;main.c: 402:             numBytesRead = getsUSBUSART(usbReadBuffer, sizeof(usbReadBuffer));
-[e = _numBytesRead ( _getsUSBUSART (2 , &U _usbReadBuffer -> -> # _usbReadBuffer `ui `uc ]
+"397
+[; ;main.c: 397:             dataIn = 0;
+[e = _dataIn -> -> 0 `i `a ]
+"398
+[; ;main.c: 398:             numBytesRead = 0;
+[e = _numBytesRead -> -> 0 `i `uc ]
+"399
+[; ;main.c: 399:             estMefDataArrive = EST_MEF_DATA_WAIT;
+[e = F4777 . `E4769 1 ]
+"401
+[; ;main.c: 401:             break;
+[e $U 515  ]
 "403
-[; ;main.c: 403:             if(numBytesRead > 0) { estMefDataArrive = EST_MEF_DATA_CHECK_END; }
-[e $ ! > -> _numBytesRead `i -> 0 `i 518  ]
+[; ;main.c: 403:         case EST_MEF_DATA_WAIT:
+[e :U 518 ]
+"405
+[; ;main.c: 405:             numBytesRead = getsUSBUSART(usbReadBuffer, sizeof(usbReadBuffer));
+[e = _numBytesRead ( _getsUSBUSART (2 , &U _usbReadBuffer -> -> # _usbReadBuffer `ui `uc ]
+"406
+[; ;main.c: 406:             if(numBytesRead > 0) { estMefDataArrive = EST_MEF_DATA_CHECK_END; }
+[e $ ! > -> _numBytesRead `i -> 0 `i 519  ]
 {
 [e = F4777 . `E4769 2 ]
 }
-[e :U 518 ]
-"405
-[; ;main.c: 405:             break;
-[e $U 514  ]
-"407
-[; ;main.c: 407:         case EST_MEF_DATA_CHECK_END:
 [e :U 519 ]
-"409
-[; ;main.c: 409:             if ((usbReadBuffer[numBytesRead-1] == '\n') || (usbReadBuffer[numBytesRead-1] == '\r')) {
-[e $ ! || == -> *U + &U _usbReadBuffer * -> -> - -> _numBytesRead `i -> 1 `i `ui `ux -> -> # *U &U _usbReadBuffer `ui `ux `ui -> 10 `ui == -> *U + &U _usbReadBuffer * -> -> - -> _numBytesRead `i -> 1 `i `ui `ux -> -> # *U &U _usbReadBuffer `ui `ux `ui -> 13 `ui 520  ]
-{
+"408
+[; ;main.c: 408:             break;
+[e $U 515  ]
 "410
-[; ;main.c: 410:                 estMefDataArrive = EST_MEF_DATA_INIT;
-[e = F4777 . `E4769 0 ]
-"411
-[; ;main.c: 411:                 dataIn = 1;
-[e = _dataIn -> -> 1 `i `a ]
-"412
-[; ;main.c: 412:             }else{
-}
-[e $U 521  ]
+[; ;main.c: 410:         case EST_MEF_DATA_CHECK_END:
 [e :U 520 ]
+"412
+[; ;main.c: 412:             if ((usbReadBuffer[numBytesRead-1] == '\n') || (usbReadBuffer[numBytesRead-1] == '\r')) {
+[e $ ! || == -> *U + &U _usbReadBuffer * -> -> - -> _numBytesRead `i -> 1 `i `ui `ux -> -> # *U &U _usbReadBuffer `ui `ux `ui -> 10 `ui == -> *U + &U _usbReadBuffer * -> -> - -> _numBytesRead `i -> 1 `i `ui `ux -> -> # *U &U _usbReadBuffer `ui `ux `ui -> 13 `ui 521  ]
 {
 "413
 [; ;main.c: 413:                 estMefDataArrive = EST_MEF_DATA_INIT;
 [e = F4777 . `E4769 0 ]
 "414
-[; ;main.c: 414:             }
-}
-[e :U 521 ]
+[; ;main.c: 414:                 dataIn = 1;
+[e = _dataIn -> -> 1 `i `a ]
 "415
-[; ;main.c: 415:             break;
-[e $U 514  ]
+[; ;main.c: 415:             }else{
+}
+[e $U 522  ]
+[e :U 521 ]
+{
+"416
+[; ;main.c: 416:                 estMefDataArrive = EST_MEF_DATA_INIT;
+[e = F4777 . `E4769 0 ]
 "417
-[; ;main.c: 417:         default:
+[; ;main.c: 417:             }
+}
 [e :U 522 ]
 "418
-[; ;main.c: 418:             estMefDataArrive = EST_MEF_DATA_INIT;
-[e = F4777 . `E4769 0 ]
-"419
-[; ;main.c: 419:             dataIn = 0;
-[e = _dataIn -> -> 0 `i `a ]
+[; ;main.c: 418:             break;
+[e $U 515  ]
 "420
-[; ;main.c: 420:             break;
-[e $U 514  ]
+[; ;main.c: 420:         default:
+[e :U 523 ]
+"421
+[; ;main.c: 421:             estMefDataArrive = EST_MEF_DATA_INIT;
+[e = F4777 . `E4769 0 ]
 "422
-[; ;main.c: 422:     }
-}
-[e $U 514  ]
-[e :U 515 ]
-[e [\ -> F4777 `ui , $ -> . `E4769 0 `ui 516
- , $ -> . `E4769 1 `ui 517
- , $ -> . `E4769 2 `ui 519
- 522 ]
-[e :U 514 ]
+[; ;main.c: 422:             dataIn = 0;
+[e = _dataIn -> -> 0 `i `a ]
 "423
-[; ;main.c: 423:     return dataIn;
-[e ) _dataIn ]
-[e $UE 513  ]
-"424
-[; ;main.c: 424: }
-[e :UE 513 ]
+[; ;main.c: 423:             break;
+[e $U 515  ]
+"425
+[; ;main.c: 425:     }
 }
-"432
-[; ;main.c: 432: _Bool ready = 0;
+[e $U 515  ]
+[e :U 516 ]
+[e [\ -> F4777 `ui , $ -> . `E4769 0 `ui 517
+ , $ -> . `E4769 1 `ui 518
+ , $ -> . `E4769 2 `ui 520
+ 523 ]
+[e :U 515 ]
+"426
+[; ;main.c: 426:     return dataIn;
+[e ) _dataIn ]
+[e $UE 514  ]
+"427
+[; ;main.c: 427: }
+[e :UE 514 ]
+}
+"435
+[; ;main.c: 435: _Bool ready = 0;
 [v _ready `a ~T0 @X0 1 e ]
 [i _ready
 -> -> 0 `i `a
 ]
-"434
-[; ;main.c: 434: _Bool MEF_GoHome(void){
+"437
+[; ;main.c: 437: _Bool MEF_GoHome(void){
 [v _MEF_GoHome `(a ~T0 @X0 1 ef ]
 {
 [e :U _MEF_GoHome ]
 [f ]
-"436
-[; ;main.c: 436:     static estMefGoHome_enum estMefGoHome = EST_MEF_GO_HOME_INIT;
+"439
+[; ;main.c: 439:     static estMefGoHome_enum estMefGoHome = EST_MEF_GO_HOME_INIT;
 [v F4785 `E4778 ~T0 @X0 1 s estMefGoHome ]
 [i F4785
 . `E4778 0
 ]
-"438
-[; ;main.c: 438:     switch(estMefGoHome){
-[e $U 525  ]
+"441
+[; ;main.c: 441:     switch(estMefGoHome){
+[e $U 526  ]
 {
-"440
-[; ;main.c: 440:         case EST_MEF_GO_HOME_INIT:
-[e :U 526 ]
-"442
-[; ;main.c: 442:             ready = 0;
-[e = _ready -> -> 0 `i `a ]
-"444
-[; ;main.c: 444:             MotorStateSet(&motor_1, DISABLED);
-[e ( _MotorStateSet (2 , &U _motor_1 . `E4719 1 ]
-"445
-[; ;main.c: 445:             _delay((unsigned long)((1)*(48000000/4000000.0)));
-[e ( __delay (1 -> * -> -> 1 `i `d / -> -> 48000000 `l `d .4000000.0 `ul ]
-"446
-[; ;main.c: 446:             DirectionSet(&motor_1, CLOCKWISE);
-[e ( _DirectionSet (2 , &U _motor_1 . `E4715 0 ]
-"447
-[; ;main.c: 447:             _delay((unsigned long)((1)*(48000000/4000000.0)));
-[e ( __delay (1 -> * -> -> 1 `i `d / -> -> 48000000 `l `d .4000000.0 `ul ]
-"448
-[; ;main.c: 448:             MotorStateSet(&motor_1, ENABLED);
-[e ( _MotorStateSet (2 , &U _motor_1 . `E4719 0 ]
-"450
-[; ;main.c: 450:             estMefGoHome = EST_MEF_GO_HOME_MOVING;
-[e = F4785 . `E4778 1 ]
-"452
-[; ;main.c: 452:             break;
-[e $U 524  ]
-"454
-[; ;main.c: 454:         case EST_MEF_GO_HOME_MOVING:
+"443
+[; ;main.c: 443:         case EST_MEF_GO_HOME_INIT:
 [e :U 527 ]
-"456
-[; ;main.c: 456:             if(!motor_1.axis_commanded.limit_1){
-[e $ ! ! != -> . . _motor_1 5 1 `i -> 0 `i 528  ]
-{
-"458
-[; ;main.c: 458:                 MotorStateSet(&motor_1, DISABLED);
+"445
+[; ;main.c: 445:             ready = 0;
+[e = _ready -> -> 0 `i `a ]
+"447
+[; ;main.c: 447:             MotorStateSet(&motor_1, DISABLED);
 [e ( _MotorStateSet (2 , &U _motor_1 . `E4719 1 ]
-"459
-[; ;main.c: 459:                 _delay((unsigned long)((1)*(48000000/4000000.0)));
+"448
+[; ;main.c: 448:             _delay((unsigned long)((1)*(48000000/4000000.0)));
 [e ( __delay (1 -> * -> -> 1 `i `d / -> -> 48000000 `l `d .4000000.0 `ul ]
-"460
-[; ;main.c: 460:                 DirectionSet(&motor_1, UNCLOCKWISE);
-[e ( _DirectionSet (2 , &U _motor_1 . `E4715 1 ]
-"461
-[; ;main.c: 461:                 _delay((unsigned long)((1)*(48000000/4000000.0)));
-[e ( __delay (1 -> * -> -> 1 `i `d / -> -> 48000000 `l `d .4000000.0 `ul ]
-"462
-[; ;main.c: 462:                 MotorStateSet(&motor_1, ENABLED);
-[e ( _MotorStateSet (2 , &U _motor_1 . `E4719 0 ]
-"464
-[; ;main.c: 464:                 estMefGoHome = EST_MEF_GO_HOME_REVERSE;
-[e = F4785 . `E4778 2 ]
-"466
-[; ;main.c: 466:             }
-}
-[e :U 528 ]
-"468
-[; ;main.c: 468:             break;
-[e $U 524  ]
-"470
-[; ;main.c: 470:         case EST_MEF_GO_HOME_REVERSE:
-[e :U 529 ]
-"472
-[; ;main.c: 472:             if(motor_1.axis_commanded.limit_1){
-[e $ ! != -> . . _motor_1 5 1 `i -> 0 `i 530  ]
-{
-"474
-[; ;main.c: 474:                 MotorStateSet(&motor_1, DISABLED);
-[e ( _MotorStateSet (2 , &U _motor_1 . `E4719 1 ]
-"475
-[; ;main.c: 475:                 _delay((unsigned long)((1)*(48000000/4000000.0)));
-[e ( __delay (1 -> * -> -> 1 `i `d / -> -> 48000000 `l `d .4000000.0 `ul ]
-"476
-[; ;main.c: 476:                 DirectionSet(&motor_1, CLOCKWISE);
+"449
+[; ;main.c: 449:             DirectionSet(&motor_1, CLOCKWISE);
 [e ( _DirectionSet (2 , &U _motor_1 . `E4715 0 ]
-"478
-[; ;main.c: 478:                 motor_1.position_current = 0.0;
-[e = . _motor_1 3 -> .0.0 `f ]
-"479
-[; ;main.c: 479:                 motor_1.position_set = 0.0;
-[e = . _motor_1 4 -> .0.0 `f ]
-"481
-[; ;main.c: 481:                 motor_1.count = 0;
-[e = . _motor_1 0 -> 0 `i ]
-"482
-[; ;main.c: 482:                 ready = 1;
-[e = _ready -> -> 1 `i `a ]
-"484
-[; ;main.c: 484:                 estMefGoHome = EST_MEF_GO_HOME_INIT;
-[e = F4785 . `E4778 0 ]
-"486
-[; ;main.c: 486:             }
+"450
+[; ;main.c: 450:             _delay((unsigned long)((1)*(48000000/4000000.0)));
+[e ( __delay (1 -> * -> -> 1 `i `d / -> -> 48000000 `l `d .4000000.0 `ul ]
+"451
+[; ;main.c: 451:             MotorStateSet(&motor_1, ENABLED);
+[e ( _MotorStateSet (2 , &U _motor_1 . `E4719 0 ]
+"453
+[; ;main.c: 453:             estMefGoHome = EST_MEF_GO_HOME_MOVING;
+[e = F4785 . `E4778 1 ]
+"455
+[; ;main.c: 455:             break;
+[e $U 525  ]
+"457
+[; ;main.c: 457:         case EST_MEF_GO_HOME_MOVING:
+[e :U 528 ]
+"459
+[; ;main.c: 459:             if(!motor_1.axis_commanded.limit_1){
+[e $ ! ! != -> . . _motor_1 5 1 `i -> 0 `i 529  ]
+{
+"461
+[; ;main.c: 461:                 MotorStateSet(&motor_1, DISABLED);
+[e ( _MotorStateSet (2 , &U _motor_1 . `E4719 1 ]
+"462
+[; ;main.c: 462:                 _delay((unsigned long)((1)*(48000000/4000000.0)));
+[e ( __delay (1 -> * -> -> 1 `i `d / -> -> 48000000 `l `d .4000000.0 `ul ]
+"463
+[; ;main.c: 463:                 DirectionSet(&motor_1, UNCLOCKWISE);
+[e ( _DirectionSet (2 , &U _motor_1 . `E4715 1 ]
+"464
+[; ;main.c: 464:                 _delay((unsigned long)((1)*(48000000/4000000.0)));
+[e ( __delay (1 -> * -> -> 1 `i `d / -> -> 48000000 `l `d .4000000.0 `ul ]
+"465
+[; ;main.c: 465:                 MotorStateSet(&motor_1, ENABLED);
+[e ( _MotorStateSet (2 , &U _motor_1 . `E4719 0 ]
+"467
+[; ;main.c: 467:                 estMefGoHome = EST_MEF_GO_HOME_REVERSE;
+[e = F4785 . `E4778 2 ]
+"469
+[; ;main.c: 469:             }
 }
+[e :U 529 ]
+"471
+[; ;main.c: 471:             break;
+[e $U 525  ]
+"473
+[; ;main.c: 473:         case EST_MEF_GO_HOME_REVERSE:
 [e :U 530 ]
-"488
-[; ;main.c: 488:             break;
-[e $U 524  ]
-"490
-[; ;main.c: 490:         default:
+"475
+[; ;main.c: 475:             if(motor_1.axis_commanded.limit_1){
+[e $ ! != -> . . _motor_1 5 1 `i -> 0 `i 531  ]
+{
+"477
+[; ;main.c: 477:                 MotorStateSet(&motor_1, DISABLED);
+[e ( _MotorStateSet (2 , &U _motor_1 . `E4719 1 ]
+"478
+[; ;main.c: 478:                 _delay((unsigned long)((1)*(48000000/4000000.0)));
+[e ( __delay (1 -> * -> -> 1 `i `d / -> -> 48000000 `l `d .4000000.0 `ul ]
+"479
+[; ;main.c: 479:                 DirectionSet(&motor_1, CLOCKWISE);
+[e ( _DirectionSet (2 , &U _motor_1 . `E4715 0 ]
+"481
+[; ;main.c: 481:                 motor_1.position_current = 0.0;
+[e = . _motor_1 3 -> .0.0 `f ]
+"482
+[; ;main.c: 482:                 motor_1.position_set = 0.0;
+[e = . _motor_1 4 -> .0.0 `f ]
+"484
+[; ;main.c: 484:                 motor_1.count = 0;
+[e = . _motor_1 0 -> 0 `i ]
+"485
+[; ;main.c: 485:                 ready = 1;
+[e = _ready -> -> 1 `i `a ]
+"487
+[; ;main.c: 487:                 estMefGoHome = EST_MEF_GO_HOME_INIT;
+[e = F4785 . `E4778 0 ]
+"489
+[; ;main.c: 489:             }
+}
 [e :U 531 ]
 "491
-[; ;main.c: 491:             estMefGoHome = EST_MEF_GO_HOME_INIT;
-[e = F4785 . `E4778 0 ]
-"492
-[; ;main.c: 492:             ready = 0;
-[e = _ready -> -> 0 `i `a ]
+[; ;main.c: 491:             break;
+[e $U 525  ]
 "493
-[; ;main.c: 493:             break;
-[e $U 524  ]
+[; ;main.c: 493:         default:
+[e :U 532 ]
+"494
+[; ;main.c: 494:             estMefGoHome = EST_MEF_GO_HOME_INIT;
+[e = F4785 . `E4778 0 ]
 "495
-[; ;main.c: 495:     }
-}
-[e $U 524  ]
-[e :U 525 ]
-[e [\ -> F4785 `ui , $ -> . `E4778 0 `ui 526
- , $ -> . `E4778 1 `ui 527
- , $ -> . `E4778 2 `ui 529
- 531 ]
-[e :U 524 ]
+[; ;main.c: 495:             ready = 0;
+[e = _ready -> -> 0 `i `a ]
 "496
-[; ;main.c: 496:     return ready;
-[e ) _ready ]
-[e $UE 523  ]
-"497
-[; ;main.c: 497: }
-[e :UE 523 ]
+[; ;main.c: 496:             break;
+[e $U 525  ]
+"498
+[; ;main.c: 498:     }
 }
-"505
-[; ;main.c: 505: void MEF_Principal(void){
+[e $U 525  ]
+[e :U 526 ]
+[e [\ -> F4785 `ui , $ -> . `E4778 0 `ui 527
+ , $ -> . `E4778 1 `ui 528
+ , $ -> . `E4778 2 `ui 530
+ 532 ]
+[e :U 525 ]
+"499
+[; ;main.c: 499:     return ready;
+[e ) _ready ]
+[e $UE 524  ]
+"500
+[; ;main.c: 500: }
+[e :UE 524 ]
+}
+"507
+[; ;main.c: 507: _Bool arrive = 0;
+[v _arrive `a ~T0 @X0 1 e ]
+[i _arrive
+-> -> 0 `i `a
+]
+"509
+[; ;main.c: 509: _Bool MEF_Positionament(void){
+[v _MEF_Positionament `(a ~T0 @X0 1 ef ]
+{
+[e :U _MEF_Positionament ]
+[f ]
+"511
+[; ;main.c: 511:     static estMefPositionament_enum estMefPositionament = EST_MEF_POSITIONAMENT_INIT;
+[v F4792 `E4786 ~T0 @X0 1 s estMefPositionament ]
+[i F4792
+. `E4786 0
+]
+"513
+[; ;main.c: 513:     switch(estMefPositionament){
+[e $U 535  ]
+{
+"515
+[; ;main.c: 515:         case EST_MEF_POSITIONAMENT_INIT:
+[e :U 536 ]
+"517
+[; ;main.c: 517:             arrive = 0;
+[e = _arrive -> -> 0 `i `a ]
+"518
+[; ;main.c: 518:             if(motor_1.position_current == motor_1.position_set){
+[e $ ! == . _motor_1 3 . _motor_1 4 537  ]
+{
+"519
+[; ;main.c: 519:                 arrive = 1;
+[e = _arrive -> -> 1 `i `a ]
+"520
+[; ;main.c: 520:             }
+}
+[e :U 537 ]
+"522
+[; ;main.c: 522:             if(motor_1.position_set < motor_1.position_current){
+[e $ ! < . _motor_1 4 . _motor_1 3 538  ]
+{
+"523
+[; ;main.c: 523:                 MotorStateSet(&motor_1, DISABLED);
+[e ( _MotorStateSet (2 , &U _motor_1 . `E4719 1 ]
+"524
+[; ;main.c: 524:                 _delay((unsigned long)((1)*(48000000/4000000.0)));
+[e ( __delay (1 -> * -> -> 1 `i `d / -> -> 48000000 `l `d .4000000.0 `ul ]
+"525
+[; ;main.c: 525:                 DirectionSet(&motor_1, CLOCKWISE);
+[e ( _DirectionSet (2 , &U _motor_1 . `E4715 0 ]
+"526
+[; ;main.c: 526:                 _delay((unsigned long)((1)*(48000000/4000000.0)));
+[e ( __delay (1 -> * -> -> 1 `i `d / -> -> 48000000 `l `d .4000000.0 `ul ]
+"527
+[; ;main.c: 527:                 motor_1.count = (motor_1.position_current - motor_1.position_set)*motor_1.steps_per_mm;
+[e = . _motor_1 0 -> * - . _motor_1 3 . _motor_1 4 . _motor_1 6 `i ]
+"528
+[; ;main.c: 528:                 MotorStateSet(&motor_1, ENABLED);
+[e ( _MotorStateSet (2 , &U _motor_1 . `E4719 0 ]
+"529
+[; ;main.c: 529:                 estMefPositionament = EST_MEF_POSITIONAMENT_MOVING;
+[e = F4792 . `E4786 1 ]
+"530
+[; ;main.c: 530:             }
+}
+[e :U 538 ]
+"532
+[; ;main.c: 532:             if(motor_1.position_set > motor_1.position_current){
+[e $ ! > . _motor_1 4 . _motor_1 3 539  ]
+{
+"533
+[; ;main.c: 533:                 MotorStateSet(&motor_1, DISABLED);
+[e ( _MotorStateSet (2 , &U _motor_1 . `E4719 1 ]
+"534
+[; ;main.c: 534:                 _delay((unsigned long)((1)*(48000000/4000000.0)));
+[e ( __delay (1 -> * -> -> 1 `i `d / -> -> 48000000 `l `d .4000000.0 `ul ]
+"535
+[; ;main.c: 535:                 DirectionSet(&motor_1, UNCLOCKWISE);
+[e ( _DirectionSet (2 , &U _motor_1 . `E4715 1 ]
+"536
+[; ;main.c: 536:                 _delay((unsigned long)((1)*(48000000/4000000.0)));
+[e ( __delay (1 -> * -> -> 1 `i `d / -> -> 48000000 `l `d .4000000.0 `ul ]
+"537
+[; ;main.c: 537:                 motor_1.count = (motor_1.position_set - motor_1.position_current)*motor_1.steps_per_mm;
+[e = . _motor_1 0 -> * - . _motor_1 4 . _motor_1 3 . _motor_1 6 `i ]
+"538
+[; ;main.c: 538:                 MotorStateSet(&motor_1, ENABLED);
+[e ( _MotorStateSet (2 , &U _motor_1 . `E4719 0 ]
+"539
+[; ;main.c: 539:                 estMefPositionament = EST_MEF_POSITIONAMENT_MOVING;
+[e = F4792 . `E4786 1 ]
+"540
+[; ;main.c: 540:             }
+}
+[e :U 539 ]
+"542
+[; ;main.c: 542:             break;
+[e $U 534  ]
+"544
+[; ;main.c: 544:         case EST_MEF_POSITIONAMENT_MOVING:
+[e :U 540 ]
+"546
+[; ;main.c: 546:             if (motor_1.count <= 0){
+[e $ ! <= . _motor_1 0 -> 0 `i 541  ]
+{
+"547
+[; ;main.c: 547:                 arrive = 1;
+[e = _arrive -> -> 1 `i `a ]
+"548
+[; ;main.c: 548:                 MotorStateSet(&motor_1, DISABLED);
+[e ( _MotorStateSet (2 , &U _motor_1 . `E4719 1 ]
+"549
+[; ;main.c: 549:                 motor_1.position_current = motor_1.position_set;
+[e = . _motor_1 3 . _motor_1 4 ]
+"550
+[; ;main.c: 550:                 LATCbits.LATC2 = !LATCbits.LATC2;
+[e = . . _LATCbits 0 2 -> -> ! != -> . . _LATCbits 0 2 `i -> 0 `i `i `uc ]
+"551
+[; ;main.c: 551:                 estMefPositionament = EST_MEF_POSITIONAMENT_INIT;
+[e = F4792 . `E4786 0 ]
+"552
+[; ;main.c: 552:             }
+}
+[e :U 541 ]
+"554
+[; ;main.c: 554:             break;
+[e $U 534  ]
+"556
+[; ;main.c: 556:         default:
+[e :U 542 ]
+"557
+[; ;main.c: 557:             estMefPositionament = EST_MEF_POSITIONAMENT_INIT;
+[e = F4792 . `E4786 0 ]
+"558
+[; ;main.c: 558:             arrive = 0;
+[e = _arrive -> -> 0 `i `a ]
+"559
+[; ;main.c: 559:             break;
+[e $U 534  ]
+"561
+[; ;main.c: 561:     }
+}
+[e $U 534  ]
+[e :U 535 ]
+[e [\ -> F4792 `ui , $ -> . `E4786 0 `ui 536
+ , $ -> . `E4786 1 `ui 540
+ 542 ]
+[e :U 534 ]
+"562
+[; ;main.c: 562:     return arrive;
+[e ) _arrive ]
+[e $UE 533  ]
+"563
+[; ;main.c: 563: }
+[e :UE 533 ]
+}
+"572
+[; ;main.c: 572: int com;
+[v _com `i ~T0 @X0 1 e ]
+"574
+[; ;main.c: 574: void MEF_Principal(void){
 [v _MEF_Principal `(v ~T0 @X0 1 ef ]
 {
 [e :U _MEF_Principal ]
 [f ]
-"507
-[; ;main.c: 507:     static estMefPrincipal_enum estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
-[v F4792 `E4786 ~T0 @X0 1 s estMefPrincipal ]
-[i F4792
-. `E4786 0
+"576
+[; ;main.c: 576:     static estMefPrincipal_enum estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
+[v F4801 `E4793 ~T0 @X0 1 s estMefPrincipal ]
+[i F4801
+. `E4793 0
 ]
-"509
-[; ;main.c: 509:     switch(estMefPrincipal){
-[e $U 534  ]
+"578
+[; ;main.c: 578:     switch(estMefPrincipal){
+[e $U 545  ]
 {
-"511
-[; ;main.c: 511:         case EST_MEF_PRINCIPAL_WAIT_FRAME:
-[e :U 535 ]
-"513
-[; ;main.c: 513:             if(MEF_DataArrive()){
-[e $ ! != -> ( _MEF_DataArrive ..  `i -> 0 `i 536  ]
+"580
+[; ;main.c: 580:         case EST_MEF_PRINCIPAL_WAIT_FRAME:
+[e :U 546 ]
+"582
+[; ;main.c: 582:             if(MEF_DataArrive()){
+[e $ ! != -> ( _MEF_DataArrive ..  `i -> 0 `i 547  ]
 {
-"514
-[; ;main.c: 514:                 LATCbits.LATC2 = !LATCbits.LATC2;
-[e = . . _LATCbits 0 2 -> -> ! != -> . . _LATCbits 0 2 `i -> 0 `i `i `uc ]
-"515
-[; ;main.c: 515:                 estMefPrincipal = EST_MEF_PRINCIPAL_READ_FRAME;
-[e = F4792 . `E4786 1 ]
-"516
-[; ;main.c: 516:             }
+"583
+[; ;main.c: 583:                 estMefPrincipal = EST_MEF_PRINCIPAL_READ_FRAME;
+[e = F4801 . `E4793 1 ]
+"584
+[; ;main.c: 584:             }
 }
-[e :U 536 ]
-"518
-[; ;main.c: 518:             break;
-[e $U 533  ]
-"520
-[; ;main.c: 520:         case EST_MEF_PRINCIPAL_READ_FRAME:
-[e :U 537 ]
-"522
-[; ;main.c: 522:             if(4 == CommandDetermine(usbReadBuffer)){
-[e $ ! == -> 4 `i ( _CommandDetermine (1 -> &U _usbReadBuffer `*uc 538  ]
+[e :U 547 ]
+"586
+[; ;main.c: 586:             break;
+[e $U 544  ]
+"588
+[; ;main.c: 588:         case EST_MEF_PRINCIPAL_READ_FRAME:
+[e :U 548 ]
+"590
+[; ;main.c: 590:             com = CommandDetermine(usbReadBuffer);
+[e = _com ( _CommandDetermine (1 -> &U _usbReadBuffer `*uc ]
+"592
+[; ;main.c: 592:             if(4 == com){
+[e $ ! == -> 4 `i _com 549  ]
 {
-"523
-[; ;main.c: 523:                 estMefPrincipal = EST_MEF_PRINCIPAL_G28_EXECUTE;
-[e = F4792 . `E4786 2 ]
-"524
-[; ;main.c: 524:             }else{
+"593
+[; ;main.c: 593:                 estMefPrincipal = EST_MEF_PRINCIPAL_G28_EXECUTE;
+[e = F4801 . `E4793 2 ]
+"594
+[; ;main.c: 594:             }else if(0 == com){
 }
-[e $U 539  ]
-[e :U 538 ]
+[e $U 550  ]
+[e :U 549 ]
+[e $ ! == -> 0 `i _com 551  ]
 {
-"525
-[; ;main.c: 525:                 estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
-[e = F4792 . `E4786 0 ]
-"526
-[; ;main.c: 526:             }
+"595
+[; ;main.c: 595:                 estMefPrincipal = EST_MEF_PRINCIPAL_G0_EXECUTE;
+[e = F4801 . `E4793 3 ]
+"596
+[; ;main.c: 596:             }else{
 }
-[e :U 539 ]
-"528
-[; ;main.c: 528:             break;
-[e $U 533  ]
-"530
-[; ;main.c: 530:         case EST_MEF_PRINCIPAL_G28_EXECUTE:
-[e :U 540 ]
-"532
-[; ;main.c: 532:             if(MEF_GoHome()){
-[e $ ! != -> ( _MEF_GoHome ..  `i -> 0 `i 541  ]
+[e $U 552  ]
+[e :U 551 ]
 {
-"533
-[; ;main.c: 533:                 estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
-[e = F4792 . `E4786 0 ]
-"534
-[; ;main.c: 534:                 putUSBUSART(((const __attribute__((space(prog))) char *)("HOME ARRIVE!\n")),sizeof("HOME ARRIVE!\n"));
-[e ( _putUSBUSART (2 , -> -> :s 10C `*Cuc `*uc -> -> 14 `ui `uc ]
-"535
-[; ;main.c: 535:             }
+"597
+[; ;main.c: 597:                 estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
+[e = F4801 . `E4793 0 ]
+"598
+[; ;main.c: 598:             }
 }
-[e :U 541 ]
-"537
-[; ;main.c: 537:             break;
-[e $U 533  ]
-"539
-[; ;main.c: 539:         default:
-[e :U 542 ]
-"540
-[; ;main.c: 540:             estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
-[e = F4792 . `E4786 0 ]
-"541
-[; ;main.c: 541:             break;
-[e $U 533  ]
-"543
-[; ;main.c: 543:     }
+[e :U 552 ]
+[e :U 550 ]
+"600
+[; ;main.c: 600:             break;
+[e $U 544  ]
+"602
+[; ;main.c: 602:         case EST_MEF_PRINCIPAL_G28_EXECUTE:
+[e :U 553 ]
+"604
+[; ;main.c: 604:             if(MEF_GoHome()){
+[e $ ! != -> ( _MEF_GoHome ..  `i -> 0 `i 554  ]
+{
+"605
+[; ;main.c: 605:                 estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
+[e = F4801 . `E4793 0 ]
+"606
+[; ;main.c: 606:                 putUSBUSART(((const __attribute__((space(prog))) char *)("HOME ARRIVE!\n")),sizeof("HOME ARRIVE!\n"));
+[e ( _putUSBUSART (2 , -> -> :s 9C `*Cuc `*uc -> -> 14 `ui `uc ]
+"607
+[; ;main.c: 607:             }
 }
-[e $U 533  ]
-[e :U 534 ]
-[e [\ -> F4792 `ui , $ -> . `E4786 0 `ui 535
- , $ -> . `E4786 1 `ui 537
- , $ -> . `E4786 2 `ui 540
- 542 ]
-[e :U 533 ]
-"545
-[; ;main.c: 545: }
-[e :UE 532 ]
+[e :U 554 ]
+"609
+[; ;main.c: 609:             break;
+[e $U 544  ]
+"611
+[; ;main.c: 611:         case EST_MEF_PRINCIPAL_G0_EXECUTE:
+[e :U 555 ]
+"613
+[; ;main.c: 613:             if(MEF_Positionament()){
+[e $ ! != -> ( _MEF_Positionament ..  `i -> 0 `i 556  ]
+{
+"614
+[; ;main.c: 614:                 estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
+[e = F4801 . `E4793 0 ]
+"615
+[; ;main.c: 615:                 putUSBUSART(((const __attribute__((space(prog))) char *)("POSITION ARRIVE!\n")),sizeof("POSITION ARRIVE!\n"));
+[e ( _putUSBUSART (2 , -> -> :s 10C `*Cuc `*uc -> -> 18 `ui `uc ]
+"616
+[; ;main.c: 616:             }
+}
+[e :U 556 ]
+"618
+[; ;main.c: 618:             break;
+[e $U 544  ]
+"620
+[; ;main.c: 620:         default:
+[e :U 557 ]
+"621
+[; ;main.c: 621:             estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
+[e = F4801 . `E4793 0 ]
+"622
+[; ;main.c: 622:             break;
+[e $U 544  ]
+"624
+[; ;main.c: 624:     }
+}
+[e $U 544  ]
+[e :U 545 ]
+[e [\ -> F4801 `ui , $ -> . `E4793 0 `ui 546
+ , $ -> . `E4793 1 `ui 548
+ , $ -> . `E4793 2 `ui 553
+ , $ -> . `E4793 3 `ui 555
+ 557 ]
+[e :U 544 ]
+"626
+[; ;main.c: 626: }
+[e :UE 543 ]
 }
 [a 3C 32 0 ]
-[a 9C 32 0 ]
+[a 8C 32 0 ]
 [a 2C 68 105 114 101 99 116 105 111 110 58 32 85 78 67 76 79 67 75 87 73 83 69 10 0 ]
 [a 1C 68 105 114 101 99 116 105 111 110 58 32 67 76 79 67 75 87 73 83 69 10 0 ]
+[a 5C 85 110 115 117 112 112 111 114 116 101 100 32 67 111 109 109 97 110 100 46 10 0 ]
 [a 6C 85 110 115 117 112 112 111 114 116 101 100 32 67 111 109 109 97 110 100 46 10 0 ]
 [a 7C 85 110 115 117 112 112 111 114 116 101 100 32 67 111 109 109 97 110 100 46 10 0 ]
-[a 8C 85 110 115 117 112 112 111 114 116 101 100 32 67 111 109 109 97 110 100 46 10 0 ]
-[a 5C 71 50 56 45 99 111 109 109 97 110 100 32 97 114 114 105 118 101 33 10 0 ]
-[a 4C 71 48 45 99 111 109 109 97 110 100 32 97 114 114 105 118 101 33 10 0 ]
-[a 10C 72 79 77 69 32 65 82 82 73 86 69 33 10 0 ]
+[a 4C 71 50 56 45 99 111 109 109 97 110 100 32 97 114 114 105 118 101 33 10 0 ]
+[a 10C 80 79 83 73 84 73 79 78 32 65 82 82 73 86 69 33 10 0 ]
+[a 9C 72 79 77 69 32 65 82 82 73 86 69 33 10 0 ]

@@ -202,7 +202,11 @@ void __interrupt() mainISR (void)
         motor_1.axis_commanded.limit_1 = LIMIT_X1_STATE;
         motor_1.axis_commanded.limit_2 = LIMIT_X2_STATE;
         
-        if(motor_1.state == ENABLED) STEP_X_AXIS_STATE = !STEP_X_AXIS_STATE;
+        if(motor_1.state == ENABLED){
+            STEP_X_AXIS_STATE = !STEP_X_AXIS_STATE;
+            if(motor_1.count > 0) motor_1.count--;
+        }
+
     }
     processUSBTasks();
 }
@@ -230,7 +234,7 @@ int CommandDetermine(char* line){
                     case 0: // ------------------------------------ G0 commands
                         
                         command = G0_COMMAND;
-                        putUSBUSART(PSTR("G0-command arrive!\n"),sizeof("G0-command arrive!\n"));
+                        //putUSBUSART(PSTR("G0-command arrive!\n"),sizeof("G0-command arrive!\n"));
                        
                         break;
                     case 1: // ------------------------------------ G1 commands
@@ -355,8 +359,7 @@ int CommandDetermine(char* line){
         token = strtok(NULL, " ");
 
     }
-    
-    
+   
     return command;
     //End of command frame analysis!!
 
@@ -497,10 +500,76 @@ bool MEF_GoHome(void){
 }
 
 typedef enum{
+    EST_MEF_POSITIONAMENT_INIT = 0,
+    EST_MEF_POSITIONAMENT_MOVING,
+}estMefPositionament_enum;
+
+bool arrive = false;
+
+bool MEF_Positionament(void){
+    
+    static estMefPositionament_enum estMefPositionament = EST_MEF_POSITIONAMENT_INIT;
+    
+    switch(estMefPositionament){
+        
+        case EST_MEF_POSITIONAMENT_INIT:
+            
+            arrive = false;
+            if(motor_1.position_current == motor_1.position_set){
+                arrive = true;
+            }
+            
+            if(motor_1.position_set < motor_1.position_current){
+                MotorStateSet(&motor_1, DISABLED);
+                __delay_us(1);
+                DirectionSet(&motor_1, CLOCKWISE);
+                __delay_us(1);
+                motor_1.count = (motor_1.position_current - motor_1.position_set)*motor_1.steps_per_mm;
+                MotorStateSet(&motor_1, ENABLED);
+                estMefPositionament = EST_MEF_POSITIONAMENT_MOVING;
+            }
+
+            if(motor_1.position_set > motor_1.position_current){
+                MotorStateSet(&motor_1, DISABLED);
+                __delay_us(1);
+                DirectionSet(&motor_1, UNCLOCKWISE);
+                __delay_us(1);
+                motor_1.count = (motor_1.position_set - motor_1.position_current)*motor_1.steps_per_mm;
+                MotorStateSet(&motor_1, ENABLED);
+                estMefPositionament = EST_MEF_POSITIONAMENT_MOVING;
+            }
+            
+            break;
+        
+        case EST_MEF_POSITIONAMENT_MOVING:
+            
+            if (motor_1.count <= 0){
+                arrive = true;
+                MotorStateSet(&motor_1, DISABLED);
+                motor_1.position_current = motor_1.position_set;
+                RELAY_STATE = !RELAY_STATE;
+                estMefPositionament = EST_MEF_POSITIONAMENT_INIT;
+            }    
+            
+            break;
+            
+        default:
+            estMefPositionament = EST_MEF_POSITIONAMENT_INIT;
+            arrive = false;
+            break;
+        
+    }
+    return arrive;
+}
+
+typedef enum{
     EST_MEF_PRINCIPAL_WAIT_FRAME = 0,
     EST_MEF_PRINCIPAL_READ_FRAME,
     EST_MEF_PRINCIPAL_G28_EXECUTE,
+    EST_MEF_PRINCIPAL_G0_EXECUTE,
 }estMefPrincipal_enum;
+
+int com;
 
 void MEF_Principal(void){
     
@@ -511,7 +580,6 @@ void MEF_Principal(void){
         case EST_MEF_PRINCIPAL_WAIT_FRAME:
             
             if(MEF_DataArrive()){
-                RELAY_STATE = !RELAY_STATE;
                 estMefPrincipal = EST_MEF_PRINCIPAL_READ_FRAME;
             }
             
@@ -519,8 +587,12 @@ void MEF_Principal(void){
             
         case EST_MEF_PRINCIPAL_READ_FRAME:
             
-            if(G28_COMMAND == CommandDetermine(usbReadBuffer)){
+            com = CommandDetermine(usbReadBuffer);
+            
+            if(G28_COMMAND == com){
                 estMefPrincipal = EST_MEF_PRINCIPAL_G28_EXECUTE;
+            }else if(G0_COMMAND == com){
+                estMefPrincipal = EST_MEF_PRINCIPAL_G0_EXECUTE;
             }else{
                 estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
             }
@@ -536,6 +608,15 @@ void MEF_Principal(void){
             
             break;
         
+        case EST_MEF_PRINCIPAL_G0_EXECUTE:
+            
+            if(MEF_Positionament()){
+                estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
+                putUSBUSART(PSTR("POSITION ARRIVE!\n"),sizeof("POSITION ARRIVE!\n"));
+            }
+            
+            break;
+            
         default:
             estMefPrincipal = EST_MEF_PRINCIPAL_WAIT_FRAME;
             break;
@@ -543,3 +624,4 @@ void MEF_Principal(void){
     }
     
 }
+
