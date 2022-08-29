@@ -178,7 +178,7 @@ void main(void)
     
     initUSBLib();
     Timer0_Init();
-    TIMER0_Set_TMR0L_Reg(TMR0L_Reg_FEED_RATE_LOW);
+    TIMER0_Set_TMR0L_Reg(TMR0L_Reg_FEED_RATE_HIGH);
     
     while(1)
     {

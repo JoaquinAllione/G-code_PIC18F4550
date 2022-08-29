@@ -1181,8 +1181,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;main.c: 180:     Timer0_Init();
 [e ( _Timer0_Init ..  ]
 "181
-[; ;main.c: 181:     TIMER0_Set_TMR0L_Reg(208);
-[e ( _TIMER0_Set_TMR0L_Reg (1 -> -> 208 `i `uc ]
+[; ;main.c: 181:     TIMER0_Set_TMR0L_Reg(254);
+[e ( _TIMER0_Set_TMR0L_Reg (1 -> -> 254 `i `uc ]
 "183
 [; ;main.c: 183:     while(1)
 [e :U 475 ]

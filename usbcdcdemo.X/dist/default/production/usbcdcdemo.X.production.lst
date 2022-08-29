@@ -1,7 +1,7 @@
 
 
 Microchip MPLAB XC8 Assembler V2.32 build 20210201212658 
-                                                                                               Sat Aug 27 17:41:58 2022
+                                                                                               Mon Aug 29 11:46:23 2022
 
 Microchip MPLAB XC8 C Compiler v2.32 (Free license) build 20210201212658 Og1 
      1                           	processor	18F4550
@@ -1537,8 +1537,8 @@ Microchip MPLAB XC8 C Compiler v2.32 (Free license) build 20210201212658 Og1
   1523                           ;main.c: 180:     Timer0_Init();
   1524  0067FA  EC94  F034         	call	_Timer0_Init	;wreg free
   1525  0067FE                     
-  1526                           ;main.c: 181:     TIMER0_Set_TMR0L_Reg(208);
-  1527  0067FE  0ED0               	movlw	208
+  1526                           ;main.c: 181:     TIMER0_Set_TMR0L_Reg(254);
+  1527  0067FE  0EFE               	movlw	254
   1528  006800  ECBA  F034         	call	_TIMER0_Set_TMR0L_Reg
   1529  006804                     l10256:
   1530                           
@@ -19336,7 +19336,7 @@ CODE                 0      0       0       0        0.0%
 
 
 Microchip Technology PIC18 Macro Assembler V2.32 build 20210201212658 
-Symbol Table                                                                                   Sat Aug 27 17:41:58 2022
+Symbol Table                                                                                   Mon Aug 29 11:46:23 2022
 
             __size_of_PrintMotorDirConfig 0044                            _usbWriteBuffer 0100  
                               _USB_SD_Ptr 1013                              ___fldiv@aexp 0078  

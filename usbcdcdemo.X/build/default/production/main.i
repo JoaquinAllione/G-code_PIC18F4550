@@ -7510,7 +7510,7 @@ void main(void)
 
     initUSBLib();
     Timer0_Init();
-    TIMER0_Set_TMR0L_Reg(208);
+    TIMER0_Set_TMR0L_Reg(254);
 
     while(1)
     {
